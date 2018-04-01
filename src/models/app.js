@@ -1,47 +1,120 @@
 import { routerRedux } from 'dva/router';
 // import storage from '../utils/storage';
-import githubServices from '../services/github';
+import queryString from 'query-string';
+import UA from 'ua-device';
+// import githubServices from '../services/github';
 import userServices from '../services/user';
+// import { getSessionToken, setSessionToken } from '../services/auth';
+import authServices from '../services/auth';
+// import storage from '../utils/storage';
 
+
+// const getToken = async () => {
+//   try {
+//     const token = await getSessionToken();
+//     return token;
+//   } catch (err) {
+//     return null;
+//   }
+// };
+
+const loadingPagePathname = '/';
 export default {
 
   namespace: 'app',
 
   state: {
-    repos: [],
-    issues: undefined,
-    owners: undefined,
+    repos: undefined,
+    userInfo: undefined,
   },
 
   subscriptions: {
     setup({ dispatch, history }) {  // eslint-disable-line
-      dispatch({ type: 'loading' });
-      // return history.listen(({ pathname }) => {
-      //   if ('/all' === pathname) {
-      //     return dispatch({ type: 'getAllIssues' });
-      //   }
-      //   const match = pathname.match(/^\/repo\//);
-      //   if (match) {
-      //     dispatch({ type: 'selectProject', payload: match[1] });
-      //   }
-      // });
+      return history.listen(({ pathname, search }) => {
+        // debugger;
+        if (loadingPagePathname === pathname) {
+          return dispatch({ type: 'loading', payload: { pathname, search } });
+        } else {
+          dispatch({ type: 'check', payload: { pathname, search } });
+        }
+      });
     },
   },
 
   effects: {
-    *fetch({ payload }, { call, put }) {  // eslint-disable-line
-      yield put({ type: 'save' });
+    *check({ payload }, { call, put, select }) {  // eslint-disable-line
+      const { userInfo } = yield select(state => state.app);
+      if (undefined === userInfo) {
+        const search = queryString.stringify(Object.assign({ from: payload.pathname }, queryString.parse(payload.search)));
+        yield put(routerRedux.replace({
+          pathname: loadingPagePathname,
+          search: `?${search}`,
+        }));
+      }
     },
-    *loading({ payload }, { put, call }) {
-      const [repos, records, favorites] = yield [
-        call(userServices.getLocalRepos),
-        call(userServices.getLocalReadRecords),
-        call(userServices.getLocalFavorites),
-      ];
-      yield put({ type: 'save', payload: { repos, records, favorites } });
-      yield put({ type: 'getOwners', payload: repos });
-      yield put({ type: 'getIssues', payload: repos });
-      yield put(routerRedux.push('/all'));
+    *loading({ payload }, { put, call }) {  // eslint-disable-line
+      // debugger;  // eslint-disable-line
+      const ua = new UA(window.navigator.userAgent);
+      if ('mobile' === ua.device.type) {
+        yield put({ type: 'save', payload: { userInfo: null } });
+        return yield put(routerRedux.replace('/mobile'));
+      }
+      const search = queryString.parse(payload.search);
+      if (search.code) {
+        return yield put({ type: 'loginByCode', payload: search });
+      } else {
+        return yield put({ type: 'loginByToken', payload: search });
+      }
+    },
+    *loginByCode({ payload }, { put, call }) {  // eslint-disable-line
+      debugger;  // eslint-disable-line
+      const { code, ...search } = payload;
+      if (!code) {
+        return yield put({ type: 'loginFaild', payload: search });
+      }
+      const { data } = yield call(userServices.loginByToken, { token });
+      if (data) {
+        return yield put({ type: 'loginSucceed', payload: { userInfo: data, search } });
+      } else {
+        return yield put({ type: 'loginFaild', payload: search });
+      }
+    },
+    *loginByToken({ payload }, { put, call }) {  // eslint-disable-line
+      const token = yield call(authServices.getSessionToken);
+      debugger;  // eslint-disable-line
+      if (!token) {
+        return yield put({ type: 'loginFaild', payload });
+      }
+      const { data } = yield call(userServices.loginByToken, { token });
+      if (data) {
+        return yield put({ type: 'loginSucceed', payload: { userInfo: data, search: payload } });
+      } else {
+        return yield put({ type: 'loginFaild', payload });
+      }
+    },
+    *loginSucceed({ payload }, { put, call }) {  // eslint-disable-line
+      debugger;  // eslint-disable-line
+      yield call(authServices.setSessionToken, payload.userInfo.sessionToken);
+      yield put({ type: 'save', payload: { userInfo: payload.userInfo } });
+      debugger;  // eslint-disable-line
+      const { data } = yield call(userServices.getRepos);
+      if (data && 0 < data.length) {
+        yield put({ type: 'save', payload: { repos: data } });
+        const { from, ...search } = payload.search;
+        const pathname = from || '/all';
+        yield put(routerRedux.replace({
+          pathname,
+          search: `?${queryString.stringify(search)}`,
+        }));
+      } else {
+        debugger;  // eslint-disable-line
+        yield put(routerRedux.replace('/all'));
+      }
+    },
+    *loginFaild({ payload }, { put, call }) {  // eslint-disable-line
+      debugger;  // eslint-disable-line
+      yield put({ type: 'save', payload: { userInfo: null } });
+      yield put(routerRedux.replace('/login'));
     },
     *getOwners({ payload }, { put, call }) {
       // const { repos } = yield select(state => state.app);

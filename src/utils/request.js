@@ -1,4 +1,6 @@
 import fetch from 'dva/fetch';
+import { getSessionToken } from './auth';
+
 
 function parseJSON(response) {
   return response.json();
@@ -14,6 +16,25 @@ function checkStatus(response) {
   throw error;
 }
 
+
+function ajax(url, opts, sessionToken) {
+  const options = Object.assign({}, {
+    method: 'GET',
+    mode: 'cors',
+    headers: {
+      // 'Content-Type': 'application/x-www-form-urlencoded',
+      sessionToken,
+    },
+  }, opts);
+
+  return fetch(url, options)
+    .then(checkStatus)
+    .then(parseText)
+    .then(parseJSON)
+    .then(data => ({ data }))
+    .catch(err => ({ err }));
+}
+
 /**
  * Requests a URL, returning a promise.
  *
@@ -21,10 +42,8 @@ function checkStatus(response) {
  * @param  {object} [options] The options we want to pass to "fetch"
  * @return {object}           An object containing either "data" or "err"
  */
-export default function request(url, options) {
-  return fetch(url, options)
-    .then(checkStatus)
-    .then(parseJSON)
-    .then(data => ({ data }))
-    .catch(err => ({ err }));
+export default function request(url, opts) {
+  return getSessionToken().then((sessionToken) => {
+    return ajax(url, opts, sessionToken);
+  }).catch(err => ({ err }));
 }
