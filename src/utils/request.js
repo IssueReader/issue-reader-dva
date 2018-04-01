@@ -1,12 +1,17 @@
 import fetch from 'dva/fetch';
-import { getSessionToken } from './auth';
+import sessionToken from './sessionToken';
 
+
+function parseText(response) {
+  return response.text();
+}
 
 function parseJSON(response) {
   return response.json();
 }
 
 function checkStatus(response) {
+  debugger;
   if (200 <= response.status && 300 > response.status) {
     return response;
   }
@@ -16,23 +21,16 @@ function checkStatus(response) {
   throw error;
 }
 
-
-function ajax(url, opts, sessionToken) {
-  const options = Object.assign({}, {
-    method: 'GET',
-    mode: 'cors',
-    headers: {
+function getHeaders() {
+  const token = sessionToken.get();
+  if (token) {
+    return {
       // 'Content-Type': 'application/x-www-form-urlencoded',
-      sessionToken,
-    },
-  }, opts);
-
-  return fetch(url, options)
-    .then(checkStatus)
-    .then(parseText)
-    .then(parseJSON)
-    .then(data => ({ data }))
-    .catch(err => ({ err }));
+      sessionToken: token,
+    };
+  } else {
+    return {};
+  }
 }
 
 /**
@@ -43,7 +41,17 @@ function ajax(url, opts, sessionToken) {
  * @return {object}           An object containing either "data" or "err"
  */
 export default function request(url, opts) {
-  return getSessionToken().then((sessionToken) => {
-    return ajax(url, opts, sessionToken);
-  }).catch(err => ({ err }));
+  const headers = getHeaders();
+  const options = Object.assign({}, {
+    method: 'GET',
+    mode: 'cors',
+    headers,
+  }, opts);
+
+  return fetch(url, options)
+    .then(checkStatus)
+    .then(parseText)
+    .then(parseJSON)
+    .then(data => ({ data }))
+    .catch(err => ({ err }));
 }

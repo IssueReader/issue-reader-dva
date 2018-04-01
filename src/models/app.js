@@ -1,22 +1,9 @@
 import { routerRedux } from 'dva/router';
-// import storage from '../utils/storage';
 import queryString from 'query-string';
 import UA from 'ua-device';
-// import githubServices from '../services/github';
 import userServices from '../services/user';
-// import { getSessionToken, setSessionToken } from '../services/auth';
 import authServices from '../services/auth';
-// import storage from '../utils/storage';
 
-
-// const getToken = async () => {
-//   try {
-//     const token = await getSessionToken();
-//     return token;
-//   } catch (err) {
-//     return null;
-//   }
-// };
 
 const loadingPagePathname = '/';
 export default {
@@ -85,7 +72,8 @@ export default {
       if (!token) {
         return yield put({ type: 'loginFaild', payload });
       }
-      const { data } = yield call(userServices.loginByToken, { token });
+      const { data } = yield call(userServices.login, { token });
+      debugger;
       if (data) {
         return yield put({ type: 'loginSucceed', payload: { userInfo: data, search: payload } });
       } else {

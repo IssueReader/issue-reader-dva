@@ -8,11 +8,14 @@ const user = () => {
 
 
 export default {
-  async loginByCode({ code }) {
-    return user().post({}, { code });
+  async loginByCode(data) {
+    return user().post({}, data);
   },
-  async loginByToken({ token }) {
-    return user().post({}, { token });
+  async loginByToken(data) {
+    return user().post({}, data);
+  },
+  async login(data) {
+    return user().post({}, data);
   },
   async getRepos() {
     return user().get({ type: 'repos' });

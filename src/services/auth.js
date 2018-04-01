@@ -1,19 +1,18 @@
-import { getSessionToken, setSessionToken, removeSessionToken } from '../utils/auth';
+import sessionToken from '../utils/sessionToken';
 
 export default {
   async getSessionToken() {
-    try {
-      debugger;
-      const token = await getSessionToken();
+    const token = sessionToken.get();
+    if (token) {
       return token;
-    } catch (err) {
+    } else {
       return null;
     }
   },
   async setSessionToken(token) {
-    return setSessionToken(token);
+    return sessionToken.set(token);
   },
   async removeSessionToken() {
-    return removeSessionToken();
+    return sessionToken.remove();
   },
 };
