@@ -6,12 +6,14 @@ function parseText(response) {
   return response.text();
 }
 
-function parseJSON(response) {
-  return response.json();
+function parseJSON(text) {
+  return new Promise((resolve) => {
+    const res = '' === text ? {} : JSON.parse(text);
+    resolve(res);
+  });
 }
 
 function checkStatus(response) {
-  debugger;
   if (200 <= response.status && 300 > response.status) {
     return response;
   }
@@ -25,8 +27,8 @@ function getHeaders() {
   const token = sessionToken.get();
   if (token) {
     return {
-      // 'Content-Type': 'application/x-www-form-urlencoded',
-      sessionToken: token,
+      'Content-Type': 'application/json',
+      SessionToken: token,
     };
   } else {
     return {};

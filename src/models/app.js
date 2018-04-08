@@ -47,6 +47,7 @@ export default {
         return yield put(routerRedux.replace('/mobile'));
       }
       const search = queryString.parse(payload.search);
+      debugger;
       if (search.code) {
         return yield put({ type: 'loginByCode', payload: search });
       } else {
@@ -68,12 +69,11 @@ export default {
     },
     *loginByToken({ payload }, { put, call }) {  // eslint-disable-line
       const token = yield call(authServices.getSessionToken);
-      debugger;  // eslint-disable-line
+      // debugger;  // eslint-disable-line
       if (!token) {
         return yield put({ type: 'loginFaild', payload });
       }
       const { data } = yield call(userServices.login, { token });
-      debugger;
       if (data) {
         return yield put({ type: 'loginSucceed', payload: { userInfo: data, search: payload } });
       } else {
@@ -81,20 +81,19 @@ export default {
       }
     },
     *loginSucceed({ payload }, { put, call }) {  // eslint-disable-line
-      debugger;  // eslint-disable-line
       yield call(authServices.setSessionToken, payload.userInfo.sessionToken);
       yield put({ type: 'save', payload: { userInfo: payload.userInfo } });
-      debugger;  // eslint-disable-line
       const { data } = yield call(userServices.getRepos);
       if (data && 0 < data.length) {
         yield put({ type: 'save', payload: { repos: data } });
         const { from, ...search } = payload.search;
-        const pathname = from || '/all';
+        const pathname = (from && 'login' !== from && '/mobile' !== from) ? from : '/all';
         yield put(routerRedux.replace({
           pathname,
           search: `?${queryString.stringify(search)}`,
         }));
       } else {
+        // TODO: 引导页面，获取用户 github 账号 watching repos
         debugger;  // eslint-disable-line
         yield put(routerRedux.replace('/all'));
       }
