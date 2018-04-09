@@ -11,22 +11,27 @@ import { Card, Button } from 'antd';
 
 import styles from './Login.less';
 
+const jump2authorize = () => {
+  window.location.replace('https://github.com/login/oauth/authorize?client_id=e3fcd5f1d9cfd0d5aaaa&redirect_uri=http%3A%2F%2Flocalhost%3A8000&scope=repo&state=github');
+};
+
 class Login extends React.PureComponent {
   // constructor(props) {
   //   super(props);
-  //   this.state = {
-  //     opened: undefined,
-  //   };
-  //   this.toggle = this.toggle.bind(this);
-  //   this.toggleFavorite = this.toggleFavorite.bind(this);
+  //   // this.state = {
+  //   //   opened: undefined,
+  //   // };
+  //   this.login = this.login.bind(this);
+  //   // this.toggleFavorite = this.toggleFavorite.bind(this);
   // }
   render() {
     return (
       <div className={styles.container}>
         <Card className={styles.card}>
           <img className={styles.logo} src="./logo128x128.png" alt="Github Iussue Blog Reader" />
-          <div className={styles.title}>Github Iussue Blog Reader</div>
-          <Button className={styles.block} type="primary" icon="github" size="large">Github 登录</Button>
+          <div className={styles.title}>Iussue Reader</div>
+          <div className={styles.subtitle}>Github Iussue Blog Reader</div>
+          <Button className={styles.block} onClick={jump2authorize} type="primary" icon="github" size="large">Github 登录</Button>
         </Card>
       </div>
     );

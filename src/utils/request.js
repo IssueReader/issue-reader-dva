@@ -24,14 +24,14 @@ function checkStatus(response) {
 }
 
 function getHeaders() {
+  const headers = {
+    'Content-Type': 'application/json',
+  };
   const token = sessionToken.get();
   if (token) {
-    return {
-      'Content-Type': 'application/json',
-      SessionToken: token,
-    };
+    return { ...headers, SessionToken: token };
   } else {
-    return {};
+    return headers;
   }
 }
 

@@ -25,7 +25,7 @@ class App extends React.PureComponent {
   }
 
   render() {
-    const { owners } = this.props;
+    const { repos } = this.props;
     // const handleClick = ({ key }) => {
     //   dispatch({ type: 'app/routerReduxPush', payload: key });
     // };
@@ -51,7 +51,7 @@ class App extends React.PureComponent {
                 <Menu.Item key="/all">所有</Menu.Item>
                 <Menu.Item key="/favorites">我的收藏</Menu.Item>
                 <Menu.SubMenu key="/repos" title="我的订阅">
-                  {owners && owners.map(it => it && <Menu.Item key={`/repos/${it.login}/${it.repo}`}>{it.name}（{it.login}）</Menu.Item>)}
+                  {repos && repos.map(it => it && <Menu.Item key={`/repos/${it.owner}/${it.repo}`}>{it.owner}/{it.repo}</Menu.Item>)}
                 </Menu.SubMenu>
                 <Menu.Item key="/discovery">发现</Menu.Item>
               </Menu>
@@ -76,11 +76,11 @@ class App extends React.PureComponent {
 }
 
 App.propTypes = {
-  // repos: PropTypes.array,
+  repos: PropTypes.array,
   // issues: PropTypes.array,
   dispatch: PropTypes.func,
 };
 
 export default connect(state => ({
-  owners: state.app.owners,
+  repos: state.app.repos,
 }))(App);

@@ -9,16 +9,14 @@ import authServices from '../services/auth';
 
 export default {
 
-  namespace: 'app',
+  namespace: 'iusses',
 
   state: {
-    repos: undefined,
-    userInfo: undefined,
+    iusses: undefined,
   },
 
   subscriptions: {
-    setup({ dispatch, history }) {  // eslint-disable-line
-      dispatch({ type: 'init', payload: history.location });
+    setup({ dispatch, history }) {
       return history.listen(({ pathname, search }) => {
         if ('/' === pathname) {
           return dispatch({ type: 'loading', payload: { pathname, search } });
@@ -41,7 +39,6 @@ export default {
       }));
     },
     *loading({ payload }, { put }) {
-      // debugger;  // eslint-disable-line
       const ua = new UA(window.navigator.userAgent);
       if ('mobile' === ua.device.type) {
         yield put({ type: 'save', payload: { userInfo: null } });
@@ -55,7 +52,6 @@ export default {
       }
     },
     *loginByCode({ payload }, { put, call }) {  // eslint-disable-line
-      // debugger;  // eslint-disable-line
       const { code, ...search } = payload;
       if (!code) {
         return yield put({ type: 'loginFaild', payload: search });
