@@ -18,6 +18,29 @@ yarn install
 yarn start
 ```
 
+## TODO list
+
+* [x] login
+
+* [ ] all issue
+
+* [ ] add repo
+
+* [ ] user github watch list
+
+* [ ] new repo page
+
+* [ ] repo page
+
+* [ ] favorites
+
+* [ ] issue list pagination
+
+* [ ] user repo list
+
+* [ ] discovery
+
+
 ## Developing
 
 ### Built With
