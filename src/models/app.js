@@ -56,11 +56,11 @@ export default {
     },
     *loginByCode({ payload }, { put, call }) {  // eslint-disable-line
       // debugger;  // eslint-disable-line
-      const { code, ...search } = payload;
+      const { code, state, ...search } = payload;
       if (!code) {
         return yield put({ type: 'loginFaild', payload: search });
       }
-      const { data } = yield call(userServices.login, { code });
+      const { data } = yield call(userServices.login, { code, state });
       if (data) {
         return yield put({ type: 'loginSucceed', payload: { userInfo: data, search } });
       } else {
@@ -108,57 +108,6 @@ export default {
       yield put({ type: 'save', payload: { userInfo: null } });
       yield put(routerRedux.replace('/login'));
     },
-    *getOwners({ payload }, { put, call }) {
-      // const { repos } = yield select(state => state.app);
-      const list = yield payload.map(it => call(githubServices.getUserInfo, it));
-      const owners = list.map(({ data }, index) => {
-        const matchObj = payload[index].match(/https:\/\/github.com\/(\w+)\/(\w+)(\/.*)?/);
-        if (data) {
-          return { ...data, repo: matchObj[2], repo_url: payload[index] };
-        } else if (matchObj) {
-          return { login: matchObj[1], name: matchObj[1], repo: matchObj[2], repo_url: payload[index] };
-        } else {
-          return null;
-        }
-      });
-      yield put({ type: 'save', payload: { owners } });
-    },
-    *getIssues({ payload }, { put, call, select }) {
-      // const { repos } = yield select(state => state.app);
-      const list = yield payload.map(it => call(githubServices.getIssues, it));
-      // const issues = list.map(({ data }) => (data || []));
-      const { records, favorites } = yield select(state => state.app);
-      const issues = list.map(({ data }) => (data || [])).reduce((accumulator, currentValue) => {
-        return [...accumulator, ...currentValue];
-      }).map((it) => {
-        return { ...it, read: records.includes(it.url), favorite: favorites.includes(it.url) };
-      });
-      yield put({
-        type: 'save',
-        payload: {
-          issues: issues.sort((a, b) => {
-            return new Date(b.created_at) - new Date(a.created_at);
-          }),
-        },
-      });
-    },
-    *routerReduxPush({ payload }, { put }) {
-      yield put(routerRedux.push(payload));
-    },
-    *markAsRead({ payload }, { call }) {
-      payload.read = true;    // eslint-disable-line
-      yield call(userServices.markAsLocalRead, payload.url);
-      // yield put(routerRedux.push(payload));
-    },
-    *toggleFavorite({ payload }, { call }) {
-      payload.favorite = !payload.favorite;    // eslint-disable-line
-      if (payload.favorite) {
-        yield call(userServices.markAsLocalFavorite, payload.url);
-      } else {
-        yield call(userServices.unmarkAsLocalFavorite, payload.url);
-      }
-    },
-    // *getOwners({ payload }, { put, call }) {},
   },
 
   reducers: {

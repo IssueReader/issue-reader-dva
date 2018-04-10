@@ -13,10 +13,17 @@ class IssueDetail extends React.PureComponent {
     return (
       <div className={styles.issue}>
         <div className={styles.context}>
-          <h1>{issue.title}</h1>
-          <p>
-            <span className={styles.user}><Avatar size="small" src={issue.user.avatar_url} />{issue.login}</span>
-            <span className={styles.time}>{moment(issue.created_at).format('YYYY年M月D日')}</span>
+          <h1 className={styles.title}>
+            <a target="_blank" rel="noopener noreferrer" href={`https://github.com/${issue.owner}/${issue.repo}/issues/${issue.number}`}>
+              {issue.title}
+            </a>
+          </h1>
+          <p className={styles.owner}>
+            <span className={styles.user}>
+              <Avatar size="small" src={issue.avatarUrl} />
+              <span className={styles.name}>{issue.name}</span>
+            </span>
+            <span className={styles.time}>{moment(issue.createdAt).format('YYYY年M月D日')}</span>
           </p>
           <Marked context={issue.body} />
         </div>

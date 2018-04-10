@@ -20,7 +20,19 @@ export default {
   async getRepos() {
     return user().get({ type: 'repos' });
   },
+  async getIssues() {
+    return user().get({ type: 'issues' });
+  },
   async getFavorites() {
     return user().get({ type: 'favorites' });
+  },
+  async markAsRead({ owner, repo, number }) {
+    return user().post({ type: 'repos', owner, repo, number });
+  },
+  async markAsFavorite({ owner, repo, number }) {
+    return user().post({ type: 'favorites' }, { owner, repo, number });
+  },
+  async removeFavorite({ owner, repo, number }) {
+    return user().remove({ type: 'favorites' }, { owner, repo, number });
   },
 };

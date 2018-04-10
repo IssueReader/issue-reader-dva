@@ -49,10 +49,10 @@ class App extends React.PureComponent {
                 onClick={this.handleClick}
               >
                 <Menu.Item key="/all">所有</Menu.Item>
-                <Menu.Item key="/favorites">我的收藏</Menu.Item>
                 <Menu.SubMenu key="/repos" title="我的订阅">
                   {repos && repos.map(it => it && <Menu.Item key={`/repos/${it.owner}/${it.repo}`}>{it.owner}/{it.repo}</Menu.Item>)}
                 </Menu.SubMenu>
+                <Menu.Item key="/favorites">我的收藏</Menu.Item>
                 <Menu.Item key="/discovery">发现</Menu.Item>
               </Menu>
             </Sider>

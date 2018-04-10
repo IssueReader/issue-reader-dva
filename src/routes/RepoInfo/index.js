@@ -6,7 +6,7 @@ import { connect } from 'dva';
 class RepoInfo extends React.PureComponent {
   render() {
     return (
-      <div>RepoInfo</div>
+      <h1 style={{ textAlign: 'center', marginTop: '2em' }}>暂不支持，敬请期待...</h1>
     );
   }
 }

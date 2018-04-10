@@ -6,7 +6,7 @@ import { connect } from 'dva';
 class Favorites extends React.PureComponent {
   render() {
     return (
-      <div>Favorites</div>
+      <h1 style={{ textAlign: 'center', marginTop: '2em' }}>暂不支持，敬请期待...</h1>
     );
   }
 }

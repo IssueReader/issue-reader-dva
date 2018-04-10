@@ -20,23 +20,27 @@ class All extends React.PureComponent {
     };
     this.toggle = this.toggle.bind(this);
     this.toggleFavorite = this.toggleFavorite.bind(this);
+    this.isOpened = this.isOpened.bind(this);
   }
   toggle(item) {
-    if (this.state.opened === item.url) {
+    if (this.isOpened(item)) {
       this.setState({ opened: undefined });
     } else {
       if (!item.read) {
-        this.props.dispatch({ type: 'app/markAsRead', payload: item });
+        this.props.dispatch({ type: 'issues/markAsRead', payload: item });
       }
-      this.setState({ opened: item.url });
+      this.setState({ opened: { ...item } });
     }
   }
   toggleFavorite(item) {
-    this.props.dispatch({ type: 'app/toggleFavorite', payload: item });
+    this.props.dispatch({ type: 'issues/toggleFavorite', payload: item });
+  }
+  isOpened(item) {
+    const { opened } = this.state;
+    return opened && item && opened.owner === item.owner && opened.repo === item.repo && opened.number === item.number;
   }
   render() {
     const { issues } = this.props;
-    const { opened } = this.state;
     if (!issues) {
       return <Loading />;
     }
@@ -55,7 +59,7 @@ class All extends React.PureComponent {
               // rowKey="id"
               className={styles.list}
               dataSource={issues}
-              renderItem={item => <Issue issue={item} opened={opened} toggle={this.toggle} toggleFavorite={this.toggleFavorite} />}
+              renderItem={item => <Issue issue={item} opened={this.isOpened(item)} toggle={this.toggle} toggleFavorite={this.toggleFavorite} />}
             />
           </Card>
         </div>
@@ -71,5 +75,5 @@ All.propTypes = {
 
 export default connect(state => ({
   // repos: state.app.repos,
-  issues: state.app.issues,
+  issues: state.issues.issues,
 }))(All);
