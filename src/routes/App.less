@@ -4,6 +4,7 @@
 .layout {
   width: 100%;
   height: 100%;
+  min-width: @screen-lg-min;
 }
 
 .header {
@@ -14,14 +15,14 @@
   width: 100%;
   display: flex;
   align-items: center;
-  color: @text-color-dark;
+  color: @heading-color-dark;
   height: @header-height;
   line-height: @header-height;
   box-shadow: @shadow-1-down; // background: @heading-color;
 }
 
 .logo {
-  margin-right: @padding-sm;
+  // margin-right: @padding-sm;
   img {
     width: @logo-size;
     height: @logo-size;
@@ -29,16 +30,21 @@
   }
 }
 
-.logo {
-  margin-right: @padding-sm;
-}
-
 .navBar {
   flex: 1;
   .ellipsis;
-  height: 100%;
-  padding-left: @padding-md;
-  padding-right: @padding-md;
+  height: 100%; // padding-left: @padding-md;
+  // padding-right: @padding-md;
+  a {
+    display: inline-block;
+    line-height: @header-height;
+    padding-left: @padding-md;
+    padding-right: @padding-md;
+    color: @text-color-secondary-dark;
+  }
+  a:hover {
+    color: @heading-color-dark;
+  }
 }
 
 .navExtra {
@@ -52,6 +58,9 @@
   padding-right: @padding-md;
   cursor: pointer;
   color: @text-color-dark;
+  input {
+    color: @heading-color-dark;
+  }
 }
 
 .navItem:hover {
@@ -64,18 +73,8 @@
   color: @heading-color-dark;
 }
 
-.userInfo {
-  max-width: 12em;
-  display: none;
-}
-
-.logout {
-  .navItem;
-  display: none;
-}
-
-.more {
-  .navItem;
+.username {
+  max-width: 8em;
   display: inline-block;
 }
 
@@ -92,7 +91,7 @@
   background: @component-background;
   -ms-overflow-style: none;
   box-shadow: @shadow-1-right;
-   :global(.ant-menu) {
+  :global(.ant-menu) {
     height: 100%;
   }
 }
@@ -102,24 +101,5 @@
 }
 
 .siderRight {
-  margin-left: 80px;
-}
-
-@media (min-width: @screen-md-min) {
-  .header {
-    padding: @layout-header-padding;
-  }
-  .logo {
-    margin-right: @padding-lg;
-  }
-  .userInfo,
-  .logout {
-    display: inline-block;
-  }
-  .more {
-    display: none;
-  }
-  .siderRight {
-    margin-left: 320px;
-  }
+  margin-left: 240px;
 }
