@@ -86,14 +86,14 @@
   position: fixed;
   z-index: @zindex-affix;
   overflow: auto;
-  height: 100vh;
+  height: 100%;
   left: 0;
   background: @component-background;
   -ms-overflow-style: none;
   box-shadow: @shadow-1-right;
-  :global(.ant-menu) {
-    height: 100%;
-  }
+  // :global(.ant-menu) {
+  //   height: 100%;
+  // }
 }
 
 .sider::-webkit-scrollbar {
@@ -103,3 +103,18 @@
 .siderRight {
   margin-left: 240px;
 }
+
+.placehoder{
+  height: 100px;
+}
+
+// .subMenu {
+//   max-height: 50%;
+//   overflow-x: hidden;
+//   overflow-y: auto;
+//   -ms-overflow-style: none;
+// }
+
+// .subMenu::-webkit-scrollbar {
+//   display: none;
+// }

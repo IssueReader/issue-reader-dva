@@ -11,7 +11,7 @@ export default {
   namespace: 'issues',
 
   state: {
-    issues: undefined,
+    issues: [],
   },
 
   subscriptions: {

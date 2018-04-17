@@ -51,8 +51,9 @@ const SiderMenu = ({
         onClick={onClick}
       >
         <Menu.Item key="/all">所有</Menu.Item>
-        <Menu.SubMenu key="/repos" title="我的订阅">
+        <Menu.SubMenu key="/repos" title="我的订阅" className={styles.subMenu}>
           {repos && repos.map(it => it && <Menu.Item key={`/repos/${it.owner}/${it.repo}`}>{it.owner}/{it.repo}</Menu.Item>)}
+          {(!repos || 0 === repos.length) && <Menu.Item key="no-data" disabled>没有订阅</Menu.Item>}
         </Menu.SubMenu>
         <Menu.Item key="/favorites">我的收藏</Menu.Item>
         <Menu.Item key="/discovery">发现</Menu.Item>
@@ -104,7 +105,7 @@ class App extends React.PureComponent {
       <Layout className={styles.layout}>
         <Header className={styles.header}>
           <a className={styles.logo} href="https://github.com/IssueReader">
-            <img alt="IssueReader" src="logo128x128.png" />
+            <img alt="IssueReader" src="/logo128x128.png" />
           </a>
           <div className={styles.navBar}>
             <Link to="/all">Github Issue Blog Reader</Link>
@@ -160,6 +161,7 @@ class App extends React.PureComponent {
           <Layout>
             <Sider className={styles.sider} width="240">
               <SiderMenu pathname={location.pathname} repos={repos} onClick={this.onSiderMenuClick} />
+              <div className={styles.placehoder} />
               {/* <Menu
                 defaultSelectedKeys={['/all']}
                 defaultOpenKeys={['/repos']}

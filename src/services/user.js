@@ -20,6 +20,12 @@ export default {
   async getRepos() {
     return user().get({ type: 'repos' });
   },
+  async addRepo({ owner, repo }) {
+    return user().post({ type: 'repos' }, { owner, repo });
+  },
+  async delRepo({ owner, repo }) {
+    return user().remove({ type: 'repos' }, { owner, repo });
+  },
   async getIssues() {
     return user().get({ type: 'issues' });
   },
@@ -34,5 +40,8 @@ export default {
   },
   async removeFavorite({ owner, repo, number }) {
     return user().remove({ type: 'favorites' }, { owner, repo, number });
+  },
+  async getWatching() {
+    return user().get({ type: 'watching' });
   },
 };

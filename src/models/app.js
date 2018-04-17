@@ -2,7 +2,7 @@
 import { routerRedux } from 'dva/router';
 import queryString from 'query-string';
 import UA from 'ua-device';
-import { Modal } from 'antd';
+import { Modal, notification } from 'antd';
 import userServices from '../services/user';
 import authServices from '../services/auth';
 
@@ -90,8 +90,8 @@ export default {
       yield call(authServices.setSessionToken, payload.userInfo.sessionToken);
       yield put({ type: 'save', payload: { userInfo: payload.userInfo } });
       const { data } = yield call(userServices.getRepos);
+      yield put({ type: 'save', payload: { repos: data || [] } });
       if (data && 0 < data.length) {
-        yield put({ type: 'save', payload: { repos: data } });
         const { from, ...search } = payload.search;
         const pathname = (from && 'login' !== from && '/mobile' !== from) ? from : '/all';
         yield put(routerRedux.replace({
@@ -100,13 +100,51 @@ export default {
         }));
       } else {
         // TODO: 引导页面，获取用户 github 账号 watching repos
-        debugger;  // eslint-disable-line
-        yield put(routerRedux.replace('/all'));
+        yield put(routerRedux.replace('/user/watching'));
       }
     },
     *loginFaild({ payload }, { put, call }) {  // eslint-disable-line
       yield put({ type: 'save', payload: { userInfo: null } });
       yield put(routerRedux.replace('/login'));
+    },
+    *subscribe({ payload }, { put, call }) {  // eslint-disable-line
+      const result = yield call(userServices.addRepo, payload);
+      if (!result.data) {
+        notification.error({ message: '订阅失败', description: '' });
+        return false;
+      }
+      yield put({ type: 'addRepo', payload });
+      notification.success({ message: '订阅成功', description: '' });
+      return true;
+    },
+    *unsubscribe({ payload }, { put, call }) {  // eslint-disable-line
+      const result = yield call(userServices.delRepo, payload);
+      if (!result.data) {
+        notification.error({ message: '退订失败', description: '' });
+        return false;
+      }
+      yield put({ type: 'delRepo', payload });
+      notification.success({ message: '退订成功', description: '' });
+      return true;
+    },
+    *addRepo({ payload }, { put, select }) {  // eslint-disable-line
+      const { repos } = yield select(state => state.app);
+      const index = repos.findIndex((it) => {
+        return it.owner === payload.owner && it.repo === payload.repo;
+      });
+      if (-1 === index) {
+        yield put({ type: 'save', payload: { repos: [...repos, payload] } });
+      }
+    },
+    *delRepo({ payload }, { put, select }) {  // eslint-disable-line
+      const { repos } = yield select(state => state.app);
+      const index = repos.findIndex((it) => {
+        return it.owner === payload.owner && it.repo === payload.repo;
+      });
+      if (-1 !== index) {
+        repos.splice(index, 1);
+        yield put({ type: 'save', payload: { repos } });
+      }
     },
   },
 
