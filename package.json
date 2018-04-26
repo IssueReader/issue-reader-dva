@@ -2,7 +2,8 @@
   "private": true,
   "scripts": {
     "dev": "node server.js",
-    "start": "roadhog dev",
+    "start": "node server.js",
+    "server": "roadhog dev",
     "build": "roadhog build",
     "lint": "eslint --ext .js src test",
     "precommit": "npm run lint"
