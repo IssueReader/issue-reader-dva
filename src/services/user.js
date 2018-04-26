@@ -20,6 +20,9 @@ export default {
   async getRepos() {
     return user().get({ type: 'repos' });
   },
+  async getRepoInfo({ owner, repo }) {
+    return user().get({ type: 'repos', owner, repo });
+  },
   async addRepo({ owner, repo }) {
     return user().post({ type: 'repos' }, { owner, repo });
   },

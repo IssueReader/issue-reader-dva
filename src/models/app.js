@@ -91,21 +91,29 @@ export default {
       yield put({ type: 'save', payload: { userInfo: payload.userInfo } });
       const { data } = yield call(userServices.getRepos);
       yield put({ type: 'save', payload: { repos: data || [] } });
-      if (data && 0 < data.length) {
-        const { from, ...search } = payload.search;
-        const pathname = (from && 'login' !== from && '/mobile' !== from) ? from : '/all';
-        yield put(routerRedux.replace({
-          pathname,
-          search: `?${queryString.stringify(search)}`,
-        }));
+      const { from, ...search } = payload.search;
+      if (data && 0 < data.length && from && 'login' !== from && '/mobile' !== from) {
+        yield put(routerRedux.replace({ from, search: `?${queryString.stringify(search)}` }));
       } else {
-        // TODO: 引导页面，获取用户 github 账号 watching repos
-        yield put(routerRedux.replace('/user/watching'));
+        yield put({ type: 'jump2default', payload: data });
       }
     },
     *loginFaild({ payload }, { put, call }) {  // eslint-disable-line
       yield put({ type: 'save', payload: { userInfo: null } });
       yield put(routerRedux.replace('/login'));
+    },
+    *jump2default({ payload }, { put, call, select }) {  // eslint-disable-line
+      // const {} = yield select
+      const { repos } = yield select(state => state.app);
+      const list = payload || repos;
+      if (list && 0 < list.length) {
+        yield put(routerRedux.replace(`/repos/${list[0].owner}/${list[0].repo}`));
+      } else {
+        // TODO: 引导页面，获取用户 github 账号 watching repos
+        yield put(routerRedux.replace('/user/watching'));
+      }
+      // yield put({ type: 'save', payload: { userInfo: null } });
+      // yield put(routerRedux.replace('/login'));
     },
     *subscribe({ payload }, { put, call }) {  // eslint-disable-line
       const result = yield call(userServices.addRepo, payload);
