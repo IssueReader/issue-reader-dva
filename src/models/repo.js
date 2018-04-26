@@ -12,6 +12,7 @@ export default {
 
   state: {
     issues: [],
+    info: undefined,
   },
 
   subscriptions: {
@@ -27,9 +28,12 @@ export default {
 
   effects: {
     *load({ payload }, { call, put, select }) {  // eslint-disable-line
-      yield put({ type: 'save', payload: { issues: undefined } });
+      yield put({ type: 'save', payload: { issues: undefined, info: payload } });
       const { data } = yield call(userServices.getRepoInfo, payload);
-      yield put({ type: 'save', payload: { issues: data || null } });
+      const { info } = yield select(state => state.repo);
+      if (info.owner === payload.owner && info.repo === payload.repo) {
+        yield put({ type: 'save', payload: { issues: data || null } });
+      }
     },
     // *getOwners({ payload }, { put, call }) {},
     *markAsRead({ payload }, { put, call }) {
