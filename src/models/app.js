@@ -86,6 +86,10 @@ export default {
         return yield put({ type: 'loginFaild', payload });
       }
     },
+    *logout({ payload }, { put, call }) {  // eslint-disable-line
+      yield call(authServices.removeSessionToken);
+      yield put(routerRedux.replace('/login'));
+    },
     *loginSucceed({ payload }, { put, call }) {  // eslint-disable-line
       yield call(authServices.setSessionToken, payload.userInfo.sessionToken);
       yield put({ type: 'save', payload: { userInfo: payload.userInfo } });
