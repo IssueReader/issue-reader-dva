@@ -97,7 +97,7 @@ export default {
       yield put({ type: 'save', payload: { repos: data || [] } });
       const { from, ...search } = payload.search;
       if (data && 0 < data.length && from && 'login' !== from && '/mobile' !== from) {
-        yield put(routerRedux.replace({ from, search: `?${queryString.stringify(search)}` }));
+        yield put(routerRedux.replace({ pathname: from, search: `?${queryString.stringify(search)}` }));
       } else {
         yield put({ type: 'jump2default', payload: data });
       }

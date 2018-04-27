@@ -79,7 +79,7 @@ const getDefaultLink = (repos) => {
   if (!repos || 0 === repos.length) {
     return '/user/watching';
   } else {
-    return `/repo/${repos[0].owner}/${repos[0].repo}`;
+    return `/repos/${repos[0].owner}/${repos[0].repo}`;
   }
 };
 
