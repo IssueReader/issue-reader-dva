@@ -1,7 +1,7 @@
 import React from 'react';
 // import { connect } from 'dva';
 import { Icon } from 'antd';
-import styles from './Loading.less';
+import styles from './Loading.module.less';
 
 
 const Loading = () => {

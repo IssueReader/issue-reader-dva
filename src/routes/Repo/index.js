@@ -9,7 +9,7 @@ import PageHeader from 'ant-design-pro/lib/PageHeader';
 // import Loading from '../Loading';
 import Issue from '../Issue';
 
-import styles from './index.less';
+import styles from './index.module.less';
 
 
 class Repo extends React.PureComponent {

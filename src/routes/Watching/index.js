@@ -4,7 +4,7 @@ import { connect } from 'dva';
 import { Table, Button, Card, Avatar } from 'antd';
 import PageHeader from 'ant-design-pro/lib/PageHeader';
 import userServices from '../../services/user';
-import styles from './index.less';
+import styles from './index.module.less';
 
 
 class Watching extends React.PureComponent {

@@ -4,7 +4,7 @@ import moment from 'moment';
 import { Avatar } from 'antd';
 import Marked from '../components/Marked';
 
-import styles from './IssueDetail.less';
+import styles from './IssueDetail.module.less';
 
 class IssueDetail extends React.PureComponent {
   render() {

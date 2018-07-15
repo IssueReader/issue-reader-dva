@@ -1,17 +1,21 @@
 import dva from 'dva';
-import { createBrowserHistory } from 'history';
-import 'antd/dist/antd.less';
+import createHistory from 'history/createHashHistory';
+import createLoading from 'dva-loading';
+import { createLogger } from 'redux-logger';
+// import 'antd/dist/antd.less';
 import 'ant-design-pro/dist/ant-design-pro.css';
 
 import './index.less';
 
 // 1. Initialize
 const app = dva({
-  history: createBrowserHistory(),
+  history: createHistory(),
 });
 
 // 2. Plugins
 // app.use({});
+app.use(createLoading());
+app.use({ onAction: createLogger() });
 
 // 3. Model
 app.model(require('./models/app').default);

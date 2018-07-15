@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
-// import styles from './index.less';
+// import styles from './index.module.less';
 
 class Profile extends React.PureComponent {
   render() {
