@@ -19,7 +19,7 @@ app.use({ onAction: createLogger() });
 
 // 3. Model
 app.model(require('./models/app').default);
-app.model(require('./models/repo').default);
+// app.model(require('./models/repo').default);
 // app.model(require('./models/issues').default);
 
 // 4. Router

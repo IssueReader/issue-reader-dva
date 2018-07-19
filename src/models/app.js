@@ -2,10 +2,18 @@
 import { routerRedux } from 'dva/router';
 import queryString from 'query-string';
 import UA from 'ua-device';
+import localForage from 'localforage';
 import { Modal, notification } from 'antd';
-import userServices from '../services/user';
-import authServices from '../services/auth';
+import userService from '../services/user';
+import authService from '../services/auth';
 
+
+const replaceState = (searchObj) => {
+  const search = queryString.stringify(searchObj);
+  const newSearch = search ? `?${search}` : '';
+  const href = window.location.href.replace(/^([^?#]+)(\?[^#]+)(#.*)?/, `$1${newSearch}$3`);
+  window.history.replaceState({}, '', href);
+};
 
 export default {
 
@@ -29,6 +37,7 @@ export default {
 
   effects: {
     *init({ payload }, { call, put, select }) {  // eslint-disable-line
+      localForage.config({ name: 'issue-reader' });
       const { userInfo } = yield select(state => state.app);
       if ('/' === payload.pathname || '/login' === payload.pathname || undefined !== userInfo) {
         return;
@@ -47,23 +56,49 @@ export default {
         yield put({ type: 'save', payload: { userInfo: null } });
         return yield put(routerRedux.replace('/mobile'));
       }
-      const search = queryString.parse(payload.search);
-      if (search.code) {
-        return yield put({ type: 'loginByCode', payload: search });
-      } else {
-        return yield put({ type: 'loginByToken', payload: search });
+      const search = queryString.parse(window.location.search || '');
+      // const search = queryString.parse(payload.search);
+      const token = yield put.resolve({ type: 'getAccessToken', payload: search });
+      if (token) {
+        const userInfo = yield put.resolve({ type: 'getUserInfo', payload: token });
+        if (userInfo) {
+          return yield put({ type: 'loginSucceed', payload: { userInfo, ...payload } });
+        }
       }
+      debugger;
+      return yield put({ type: 'loginFaild' });
     },
-    *loginByCode({ payload }, { put, call }) {  // eslint-disable-line
+    *getAccessToken({ payload }, { put, call }) {  // eslint-disable-line
+      // debugger;  // eslint-disable-line
+      const { code, state, ...search } = payload;
+      if (code && state) {
+        replaceState(search);
+        const { data } = yield call(userService.getAccessTokenByCode, { code, state });
+        if (data) {
+          yield call(authService.setAccessToken, data);
+        }
+        return data || null;
+      }
+      debugger;
+      const token = yield call(authService.getAccessToken);
+      debugger;
+      return token || null;
+    },
+    *getUserInfo({ payload }, { put, call }) {  // eslint-disable-line
+      // debugger;  // eslint-disable-line
+      const { data } = yield call(userService.getUserInfo, payload);
+      return data || null;
+    },
+    *getAccessTokenByCode({ payload }, { put, call }) {  // eslint-disable-line
       // debugger;  // eslint-disable-line
       const { code, state, ...search } = payload;
       if (!code) {
         return yield put({ type: 'loginFaild', payload: search });
       }
-      const { data } = yield call(userServices.login, { code, state });
-      if (data) {
-        return yield put({ type: 'loginSucceed', payload: { userInfo: data, search } });
-      } else {
+      replaceState(search);
+      const { data } = yield call(userService.loginByCode, { code, state });
+      debugger;  // eslint-disable-line
+      if (!data) {
         const ref = Modal.error({
           title: '登录失败',
           content: 'code 已过期',
@@ -73,13 +108,18 @@ export default {
         });
         return yield put({ type: 'loginFaild', payload: search });
       }
+      yield call(authService.setAccessToken, data);
+      return yield put({ type: 'loginSucceed', payload: data });
     },
     *loginByToken({ payload }, { put, call }) {  // eslint-disable-line
-      const token = yield call(authServices.getSessionToken);
+      debugger;  // eslint-disable-line
+      const token = yield call(authService.getSessionToken);
+      debugger;  // eslint-disable-line
       if (!token) {
         return yield put({ type: 'loginFaild', payload });
       }
-      const { data } = yield call(userServices.login, { token });
+      debugger;  // eslint-disable-line
+      const { data } = yield call(userService.loginByToken, { token });
       if (data) {
         return yield put({ type: 'loginSucceed', payload: { userInfo: data, search: payload } });
       } else {
@@ -87,13 +127,13 @@ export default {
       }
     },
     *logout({ payload }, { put, call }) {  // eslint-disable-line
-      yield call(authServices.removeSessionToken);
+      yield call(authService.removeSessionToken);
       yield put(routerRedux.replace('/login'));
     },
     *loginSucceed({ payload }, { put, call }) {  // eslint-disable-line
-      yield call(authServices.setSessionToken, payload.userInfo.sessionToken);
+      yield call(authService.setSessionToken, payload.userInfo.sessionToken);
       yield put({ type: 'save', payload: { userInfo: payload.userInfo } });
-      const { data } = yield call(userServices.getRepos);
+      const { data } = yield call(userService.getRepos);
       yield put({ type: 'save', payload: { repos: data || [] } });
       const { from, ...search } = payload.search;
       if (data && 0 < data.length && from && 'login' !== from && '/mobile' !== from) {
@@ -120,7 +160,7 @@ export default {
       // yield put(routerRedux.replace('/login'));
     },
     *subscribe({ payload }, { put, call }) {  // eslint-disable-line
-      const result = yield call(userServices.addRepo, payload);
+      const result = yield call(userService.addRepo, payload);
       if (!result.data) {
         notification.error({ message: '订阅失败', description: '' });
         return false;
@@ -130,7 +170,7 @@ export default {
       return true;
     },
     *unsubscribe({ payload }, { put, call }) {  // eslint-disable-line
-      const result = yield call(userServices.delRepo, payload);
+      const result = yield call(userService.delRepo, payload);
       if (!result.data) {
         notification.error({ message: '退订失败', description: '' });
         return false;

@@ -1,6 +1,7 @@
 // import storage from '../utils/storage';
 import resource from '../utils/resource';
-// import { request } from '../utils/request';
+import request from '../utils/request';
+// import sessionToken from '../utils/sessionToken';
 
 const user = () => {
   return resource('/user/:type/:owner/:repo/issues/:number');
@@ -8,8 +9,12 @@ const user = () => {
 
 
 export default {
-  async loginByCode(data) {
-    return user().post({}, data);
+  async getAccessTokenByCode(data) {
+    return request('http://localhost:3000/login', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+    // return user().post({}, { code, state });
   },
   async loginByToken(data) {
     return user().post({}, data);
