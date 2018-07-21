@@ -59,11 +59,12 @@ class Watching extends React.PureComponent {
   async load() {
     this.setState({ list: undefined });
     const { data } = await userServices.getWatching();
+    debugger;
     if (!data) {
       return this.setState({ list: null });
     }
     return this.setState({
-      list: data.map((it) => {
+      list: data.list.map((it) => {
         const index = this.props.repos.findIndex((item) => {
           return it.name === item.repo && it.owner === item.owner;
         });

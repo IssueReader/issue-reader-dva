@@ -1,8 +1,7 @@
 // import storage from '../utils/storage';
-import gql from 'graphql-tag';
 import resource from '../utils/resource';
 import request from '../utils/request';
-import graphql from '../utils/graphql';
+import github from '../utils/github';
 // import sessionToken from '../utils/sessionToken';
 
 const user = () => {
@@ -19,14 +18,31 @@ export default {
     // return user().post({}, { code, state });
   },
   async getUserInfo() {
-    return graphql.query(gql`query {
-      viewer {
-        login
-        avatarUrl
-        name
-        bio
+    return github.getUserInfo();
+  },
+  async getWatching() {
+    const { data, errMsg } = await github.getWatching();
+    if (errMsg) {
+      return { errMsg };
+    }
+    const { totalCount, edges } = data.viewer.watching;
+    return {
+      data: {
+        totalCount,
+        list: edges.map((it) => {
+          return {
+            cursor: it.cursor,
+            owner: it.node.owner.login,
+            avatarUrl: it.node.owner.avatarUrl,
+            name: it.node.name,
+            issueCount: it.node.issues.totalCount,
+            starCount: it.node.stargazers.totalCount,
+            watchCount: it.node.watchers.totalCount,
+          };
+        }),
       }
-    }`);
+    };
+    // return github.getWatching();
   },
   async loginByToken(data) {
     return user().post({}, data);
@@ -60,8 +76,5 @@ export default {
   },
   async removeFavorite({ owner, repo, number }) {
     return user().remove({ type: 'favorites' }, { owner, repo, number });
-  },
-  async getWatching() {
-    return user().get({ type: 'watching' });
   },
 };

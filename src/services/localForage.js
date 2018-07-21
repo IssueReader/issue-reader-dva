@@ -1,6 +1,6 @@
 import localForage from 'localforage';
-import gql from 'graphql-tag';
-import graphql from '../utils/graphql';
+import github from '../utils/github';
+
 
 const clearDB = async () => {
   await localForage.setItem('repos', []);
@@ -50,25 +50,7 @@ export default {
     if (!repo.owner || !repo.repo) {
       return repo;
     }
-    const { data } = await graphql.query(gql`query {
-      repository(owner: "${repo.owner}", name: "${repo.repo}") {
-        issues(first : 100, states:OPEN){
-          totalCount
-          edges{
-            node{
-              title
-              number
-              createdAt
-            }
-          }
-        }
-      }
-      user(login: "${repo.owner}"){
-        avatarUrl
-        bio
-        name
-      }
-    }`);
+    const { data } = await github.getRepoInfo(repo);
     if (!data) {
       return repo;
     }
