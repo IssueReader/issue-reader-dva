@@ -1,6 +1,8 @@
 // import storage from '../utils/storage';
+import gql from 'graphql-tag';
 import resource from '../utils/resource';
 import request from '../utils/request';
+import graphql from '../utils/graphql';
 // import sessionToken from '../utils/sessionToken';
 
 const user = () => {
@@ -15,6 +17,16 @@ export default {
       body: JSON.stringify(data),
     });
     // return user().post({}, { code, state });
+  },
+  async getUserInfo() {
+    return graphql.query(gql`query {
+      viewer {
+        login
+        avatarUrl
+        name
+        bio
+      }
+    }`);
   },
   async loginByToken(data) {
     return user().post({}, data);

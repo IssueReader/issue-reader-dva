@@ -6,6 +6,7 @@ import localForage from 'localforage';
 import { Modal, notification } from 'antd';
 import userService from '../services/user';
 import authService from '../services/auth';
+import localForageService from '../services/localForage';
 
 
 const replaceState = (searchObj) => {
@@ -22,6 +23,8 @@ export default {
   state: {
     repos: undefined,
     userInfo: undefined,
+    percent: 0,
+    status: 'active',
   },
 
   subscriptions: {
@@ -65,7 +68,6 @@ export default {
           return yield put({ type: 'loginSucceed', payload: { userInfo, ...payload } });
         }
       }
-      debugger;
       return yield put({ type: 'loginFaild' });
     },
     *getAccessToken({ payload }, { put, call }) {  // eslint-disable-line
@@ -79,85 +81,48 @@ export default {
         }
         return data || null;
       }
-      debugger;
       const token = yield call(authService.getAccessToken);
-      debugger;
       return token || null;
     },
     *getUserInfo({ payload }, { put, call }) {  // eslint-disable-line
       // debugger;  // eslint-disable-line
       const { data } = yield call(userService.getUserInfo, payload);
-      return data || null;
-    },
-    *getAccessTokenByCode({ payload }, { put, call }) {  // eslint-disable-line
-      // debugger;  // eslint-disable-line
-      const { code, state, ...search } = payload;
-      if (!code) {
-        return yield put({ type: 'loginFaild', payload: search });
-      }
-      replaceState(search);
-      const { data } = yield call(userService.loginByCode, { code, state });
-      debugger;  // eslint-disable-line
-      if (!data) {
-        const ref = Modal.error({
-          title: '登录失败',
-          content: 'code 已过期',
-          onOk: () => {
-            ref.destroy();
-          },
-        });
-        return yield put({ type: 'loginFaild', payload: search });
-      }
-      yield call(authService.setAccessToken, data);
-      return yield put({ type: 'loginSucceed', payload: data });
-    },
-    *loginByToken({ payload }, { put, call }) {  // eslint-disable-line
-      debugger;  // eslint-disable-line
-      const token = yield call(authService.getSessionToken);
-      debugger;  // eslint-disable-line
-      if (!token) {
-        return yield put({ type: 'loginFaild', payload });
-      }
-      debugger;  // eslint-disable-line
-      const { data } = yield call(userService.loginByToken, { token });
-      if (data) {
-        return yield put({ type: 'loginSucceed', payload: { userInfo: data, search: payload } });
-      } else {
-        return yield put({ type: 'loginFaild', payload });
-      }
+      return (data && data.viewer) || null;
     },
     *logout({ payload }, { put, call }) {  // eslint-disable-line
-      yield call(authService.removeSessionToken);
+      yield call(authService.removeAccessToken);
+      yield put({ type: 'save', payload: { userInfo: null } });
       yield put(routerRedux.replace('/login'));
     },
     *loginSucceed({ payload }, { put, call }) {  // eslint-disable-line
-      yield call(authService.setSessionToken, payload.userInfo.sessionToken);
+      debugger;
       yield put({ type: 'save', payload: { userInfo: payload.userInfo } });
-      const { data } = yield call(userService.getRepos);
-      yield put({ type: 'save', payload: { repos: data || [] } });
-      const { from, ...search } = payload.search;
-      if (data && 0 < data.length && from && 'login' !== from && '/mobile' !== from) {
-        yield put(routerRedux.replace({ pathname: from, search: `?${queryString.stringify(search)}` }));
+      // TODO: 更新缓存的数据，本地不缓存 issue body，每次打开都向 github 拉取最新的内容
+      const repos = yield put.resolve({ type: 'updateDB', payload: payload.userInfo });
+      if (repos && 0 < repos.length) {
+        yield put(routerRedux.replace('/all'));
       } else {
-        yield put({ type: 'jump2default', payload: data });
+        yield put(routerRedux.replace('/user/watching'));
       }
     },
     *loginFaild({ payload }, { put, call }) {  // eslint-disable-line
       yield put({ type: 'save', payload: { userInfo: null } });
       yield put(routerRedux.replace('/login'));
     },
-    *jump2default({ payload }, { put, call, select }) {  // eslint-disable-line
+    *updateDB({ payload }, { put, call, select }) {  // eslint-disable-line
       // const {} = yield select
-      const { repos } = yield select(state => state.app);
-      const list = payload || repos;
-      if (list && 0 < list.length) {
-        yield put(routerRedux.replace(`/repos/${list[0].owner}/${list[0].repo}`));
-      } else {
-        // TODO: 引导页面，获取用户 github 账号 watching repos
-        yield put(routerRedux.replace('/user/watching'));
+      // debugger;
+      yield put({ type: 'save', payload: { percent: 0, status: 'active' } });
+      // 检查当前登录用户与缓存的用户是否一致
+      yield call(localForageService.checkUser, payload);
+      const list = yield call(localForageService.getRepos, payload);
+      for (let i = 0, l = list.length; i < l; i += 1) {
+        yield call(localForageService.syncRepoInfo, list[i]);
+        yield put({ type: 'save', payload: { percent: Math.floor(i / l) } });
       }
-      // yield put({ type: 'save', payload: { userInfo: null } });
-      // yield put(routerRedux.replace('/login'));
+      const repos = yield call(localForageService.getRepos, payload);
+      yield put({ type: 'save', payload: { percent: 100, status: 'success', repos } });
+      return repos;
     },
     *subscribe({ payload }, { put, call }) {  // eslint-disable-line
       const result = yield call(userService.addRepo, payload);
@@ -205,5 +170,4 @@ export default {
       return { ...state, ...action.payload };
     },
   },
-
 };

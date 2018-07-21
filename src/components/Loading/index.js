@@ -1,7 +1,6 @@
 import React from 'react';
-// import { connect } from 'dva';
 import { Icon } from 'antd';
-import styles from './Loading.module.less';
+import styles from './index.module.less';
 
 
 const Loading = () => {
@@ -12,9 +11,4 @@ const Loading = () => {
   );
 };
 
-// function mapStateToProps(state) {
-//   return { ...state.client };
-// }
-
-// export default Show;
 export default Loading;
