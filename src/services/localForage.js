@@ -56,7 +56,7 @@ export default {
     }
     const repoInfo = { ...repo, user: data.user };
     const repos = await getList('repos');
-    const index = repos.findIndex(it=> it.owner === repo.owner && it.repo === repo.repo);
+    const index = repos.findIndex(it => it.owner === repo.owner && it.repo === repo.repo);
     if (-1 === index) {
       repos.push(repoInfo);
     } else {
@@ -76,7 +76,7 @@ export default {
       updateDB();
       return true;
     } catch (errMsg) {
-      debugger;
+
       return false;
     }
   },

@@ -9,7 +9,7 @@ const query = async (schema) => {
   try {
     const resp = await client.query({ query: schema });
     return { data: resp.data };
-  } catch(errMsg) {
+  } catch (errMsg) {
     return { errMsg };
   }
 };

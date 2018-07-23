@@ -51,7 +51,7 @@ class Watching extends React.PureComponent {
       key: 'action',
       render: (text, record) => (
         record.watch ?
-          <Button loading={record.loading} onClick={e => this.unsubscribe(e, record)}>退订</ Button> :
+          <Button loading={record.loading} onClick={e => this.unsubscribe(e, record)}>退订</Button> :
           <Button type="primary" loading={record.loading} onClick={e => this.subscribe(e, record)}>订阅</Button>
       ),
     }];

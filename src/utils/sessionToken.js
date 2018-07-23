@@ -7,7 +7,7 @@ export default {
     try {
       const token = await localForage.getItem(sessionTokenKey);
       return token;
-    } catch(errMsg){
+    } catch (errMsg) {
       return null;
     }
   },

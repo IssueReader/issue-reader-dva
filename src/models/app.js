@@ -3,7 +3,7 @@ import { routerRedux } from 'dva/router';
 import queryString from 'query-string';
 import UA from 'ua-device';
 import localForage from 'localforage';
-import { Modal, notification } from 'antd';
+import { notification } from 'antd';
 import userService from '../services/user';
 import authService from '../services/auth';
 import localForageService from '../services/localForage';
