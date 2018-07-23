@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { Switch, Redirect, routerRedux, Link } from 'dva/router';
 import { Layout, Menu, Icon, Avatar, Dropdown } from 'antd';
-import HeaderSearch from 'ant-design-pro/lib/HeaderSearch';
+// import HeaderSearch from 'ant-design-pro/lib/HeaderSearch';
 import getAppRoutes from '../common/router';
 // import All from './All';
 // import Discovery from './Discovery';
@@ -123,7 +123,7 @@ class BasicLayout extends React.PureComponent {
             <Link to={link}>Github Issue Blog Reader</Link>
           </div>
           <div className={styles.navExtra}>
-            <div className={styles.navItem}>
+            {/* <div className={styles.navItem}>
               <HeaderSearch
                 placeholder="站内搜索"
                 dataSource={['搜索提示一', '搜索提示二', '搜索提示三']}
@@ -134,7 +134,7 @@ class BasicLayout extends React.PureComponent {
                   console.log('enter', value); // eslint-disable-line
                 }}
               />
-            </div>
+            </div> */}
             <div className={styles.navItem}>
               <Icon type="check-square-o" />
               <span>&nbsp;Mark All as Read</span>

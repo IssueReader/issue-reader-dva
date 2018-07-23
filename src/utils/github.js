@@ -12,8 +12,8 @@ export default {
       }
     }`);
   },
-  getRepoInfo({ owner, repo }) {
-    return graphql.query(gql`query {
+  async getRepoInfo({ owner, repo }) {
+    const info = await graphql.query(gql`query {
       repository(owner: "${owner}", name: "${repo}") {
         issues(first : 100, states:OPEN){
           totalCount
@@ -32,9 +32,22 @@ export default {
         name
       }
     }`);
+    if (info.errMsg) {
+      return info;
+    }
+    const data = {
+      owner,
+      repo,
+      totalCount: info.data.repository.issues.totalCount,
+      list: info.data.repository.issues.edges.map((it) => {
+        return { owner, repo, ...it.node };
+      }),
+      user: info.data.user,
+    };
+    return { data };
   },
   async getWatching(cursor) {
-    return graphql.query(gql`query {
+    const info = await graphql.query(gql`query {
       viewer {
         watching (first: 100${cursor ? `, after: "${cursor}"` : ''}){
           totalCount
@@ -60,5 +73,24 @@ export default {
         }
       }
     }`);
+    if (info.errMsg) {
+      return info;
+    }
+    const { totalCount, edges } = info.data.viewer.watching;
+    const data = {
+      totalCount,
+      list: edges.map((it) => {
+        return {
+          cursor: it.cursor,
+          owner: it.node.owner.login,
+          avatarUrl: it.node.owner.avatarUrl,
+          repo: it.node.name,
+          issueCount: it.node.issues.totalCount,
+          starCount: it.node.stargazers.totalCount,
+          watchCount: it.node.watchers.totalCount,
+        };
+      }),
+    };
+    return { data };
   },
 };

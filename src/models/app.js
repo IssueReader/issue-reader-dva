@@ -95,9 +95,7 @@ export default {
       yield put(routerRedux.replace('/login'));
     },
     *loginSucceed({ payload }, { put, call }) {  // eslint-disable-line
-      debugger;
       yield put({ type: 'save', payload: { userInfo: payload.userInfo } });
-      // TODO: 更新缓存的数据，本地不缓存 issue body，每次打开都向 github 拉取最新的内容
       const repos = yield put.resolve({ type: 'updateDB', payload: payload.userInfo });
       if (repos && 0 < repos.length) {
         yield put(routerRedux.replace('/all'));
@@ -110,10 +108,7 @@ export default {
       yield put(routerRedux.replace('/login'));
     },
     *updateDB({ payload }, { put, call, select }) {  // eslint-disable-line
-      // const {} = yield select
-      // debugger;
       yield put({ type: 'save', payload: { percent: 0, status: 'active' } });
-      // 检查当前登录用户与缓存的用户是否一致
       yield call(localForageService.checkUser, payload);
       const list = yield call(localForageService.getRepos, payload);
       for (let i = 0, l = list.length; i < l; i += 1) {
@@ -125,43 +120,25 @@ export default {
       return repos;
     },
     *subscribe({ payload }, { put, call }) {  // eslint-disable-line
-      const result = yield call(userService.addRepo, payload);
-      if (!result.data) {
+      const { data } = yield call(localForageService.addRepo, payload);
+      if (data) {
+        yield put({ type: 'updateRepos' });
+        notification.success({ message: '订阅成功', description: '' });
+        return true;
+      } else {
         notification.error({ message: '订阅失败', description: '' });
         return false;
       }
-      yield put({ type: 'addRepo', payload });
-      notification.success({ message: '订阅成功', description: '' });
-      return true;
     },
     *unsubscribe({ payload }, { put, call }) {  // eslint-disable-line
-      const result = yield call(userService.delRepo, payload);
-      if (!result.data) {
-        notification.error({ message: '退订失败', description: '' });
-        return false;
-      }
-      yield put({ type: 'delRepo', payload });
+      yield call(localForageService.delRepo, payload);
+      yield put({ type: 'updateRepos' });
       notification.success({ message: '退订成功', description: '' });
       return true;
     },
-    *addRepo({ payload }, { put, select }) {  // eslint-disable-line
-      const { repos } = yield select(state => state.app);
-      const index = repos.findIndex((it) => {
-        return it.owner === payload.owner && it.repo === payload.repo;
-      });
-      if (-1 === index) {
-        yield put({ type: 'save', payload: { repos: [...repos, payload] } });
-      }
-    },
-    *delRepo({ payload }, { put, select }) {  // eslint-disable-line
-      const { repos } = yield select(state => state.app);
-      const index = repos.findIndex((it) => {
-        return it.owner === payload.owner && it.repo === payload.repo;
-      });
-      if (-1 !== index) {
-        repos.splice(index, 1);
-        yield put({ type: 'save', payload: { repos } });
-      }
+    *updateRepos({ payload }, { put, call }) {  // eslint-disable-line
+      const list = yield call(localForageService.getRepos, payload);
+      yield put({ type: 'save', payload: { repos: list } });
     },
   },
 

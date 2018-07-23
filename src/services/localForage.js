@@ -10,24 +10,48 @@ const clearDB = async () => {
   await localForage.setItem('utime', 0);
 };
 
-const updateDB = async () => {
-  const ltime = await localForage.getItem('ltime') || 0;
-  const repos = await localForage.getItem('repos') || [];
-  const current = new Date().getTime();
-  if (60 * 60 * 1000 > current - ltime || 0 === repos.length) {
-    return;
+const getItem = async (key, defaultValue = []) => {
+  try {
+    const list = await localForage.getItem(key);
+    return list || defaultValue;
+  } catch (errMsg) {
+    return defaultValue;
   }
-  // TODO: 更新所有仓库 issue 列表
+};
+const setItem = async (key, value) => {
+  try {
+    await localForage.setItem(key, value);
+  } catch (errMsg) {
+
+  }
+  return value;
 };
 
-const getList = async (key) => {
-  try {
-    const repos = await localForage.getItem(key);
-    return repos || [];
-  } catch (errMsg) {
-    return [];
+
+const updateRepoInfo = async (repoInfo) => {
+  const repos = await getItem('repos');
+  const index = repos.findIndex(it => it.owner === repoInfo.owner && it.repo === repoInfo.repo);
+  if (-1 === index) {
+    repos.push(repoInfo);
+  } else {
+    repos[index] = repoInfo;
   }
+  await setItem('repos', repos);
 };
+const updateIssueList = async (list) => {
+  const issues = await getItem('issues');
+  list.map((issue) => {
+    const index = issues.findIndex(it => it.owner === issue.owner && it.repo === issue.repo && it.number === issue.number);
+    if (-1 === index) {
+      issues.push(issue);
+    } else {
+      issues[index] = { ...issues[index], ...issue };
+    }
+    return issue;
+  });
+  await setItem('issues', issues);
+};
+
 
 export default {
   async checkUser(userInfo) {
@@ -43,41 +67,45 @@ export default {
     }
   },
   async getRepos() {
-    const repos = await getList('repos');
-    return repos;
+    return getItem('repos');
   },
   async syncRepoInfo(repo) {
     if (!repo.owner || !repo.repo) {
-      return repo;
+      return { data: repo };
     }
-    const { data } = await github.getRepoInfo(repo);
-    if (!data) {
-      return repo;
+    const info = await github.getRepoInfo(repo);
+    if (info.errMsg) {
+      return info;
     }
-    const repoInfo = { ...repo, user: data.user };
-    const repos = await getList('repos');
-    const index = repos.findIndex(it => it.owner === repo.owner && it.repo === repo.repo);
-    if (-1 === index) {
-      repos.push(repoInfo);
-    } else {
-      repos[index] = repoInfo;
-    }
-    await localForage.setItem('repos', repos);
+    const { list, ...repoInfo } = info.data;
+    await updateRepoInfo(repoInfo);
+    await updateIssueList(list);
     return repoInfo;
   },
-  async updateDB(userInfo) {
-    // TODO: 检查缓存的 userInfo login 与 当期登录的是否一致，如果不一致，需要将
-    try {
-      const userId = await localForage.getItem('userId');
-      if (userId !== userInfo.login) {
-        await clearDB();
-        await localForage.setItem('userId', userInfo.login);
-      }
-      updateDB();
-      return true;
-    } catch (errMsg) {
-
-      return false;
+  async addRepo({ owner, repo }) {
+    debugger;
+    const info = await github.getRepoInfo({ owner, repo });
+    if (info.errMsg) {
+      return info;
     }
+    debugger;
+    const { list, ...repoInfo } = info.data;
+    await updateRepoInfo(repoInfo);
+    await updateIssueList(list);
+    return info;
+  },
+  async delRepo({ owner, repo }) {
+    const repos = await getItem('repos');
+    const index = repos.findIndex(it => it.owner === owner && it.repo === repo);
+    if (-1 !== index) {
+      repos.splice(index, 1);
+      await setItem('repos', repos);
+    }
+    const issues = await getItem('issues');
+    const list = issues.filter(it => (it.owner !== owner || it.repo !== repo));
+    if (list.length < issues.length) {
+      await setItem('issues', list);
+    }
+    return { owner, repo };
   },
 };

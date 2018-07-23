@@ -51,7 +51,9 @@ const getRouterDate = () => {
   }, {
     path: '/user/watching',
     key: 'watching',
-    models: () => [],
+    models: () => [
+      import('../models/watching'),
+    ],
     component: () => import('../routes/Watching'),
   }, {
     path: '/search',
