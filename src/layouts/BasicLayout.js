@@ -46,7 +46,7 @@ const SiderMenu = ({
     return (
       <Menu
         defaultSelectedKeys={['/all']}
-        defaultOpenKeys={['/repos']}
+        // defaultOpenKeys={['/repos']}
         selectedKeys={selectedKeys}
         mode="inline"
         onClick={onClick}
@@ -76,13 +76,13 @@ const SiderMenu = ({
   }
 };
 
-const getDefaultLink = (repos) => {
-  if (!repos || 0 === repos.length) {
-    return '/user/watching';
-  } else {
-    return `/repos/${repos[0].owner}/${repos[0].repo}`;
-  }
-};
+// const getDefaultLink = (repos) => {
+//   if (!repos || 0 === repos.length) {
+//     return '/user/watching';
+//   } else {
+//     return `/repos/${repos[0].owner}/${repos[0].repo}`;
+//   }
+// };
 
 
 class BasicLayout extends React.PureComponent {
@@ -111,7 +111,7 @@ class BasicLayout extends React.PureComponent {
       repos,
     } = this.props;
 
-    const link = getDefaultLink(repos);
+    // const link = getDefaultLink(repos);
 
     return (
       <Layout className={styles.layout}>
@@ -120,7 +120,7 @@ class BasicLayout extends React.PureComponent {
             <img alt="IssueReader" src="/logo128x128.png" />
           </a>
           <div className={styles.navBar}>
-            <Link to={link}>Github Issue Blog Reader</Link>
+            <Link to="/all">Github Issue Blog Reader</Link>
           </div>
           <div className={styles.navExtra}>
             {/* <div className={styles.navItem}>

@@ -18,9 +18,15 @@ class Issues extends React.PureComponent {
     await this.setState({ selected: undefined });
     console.log(item);
     await this.setState({ selected: item });
+    if (!item.read) {
+      this.props.updateIssue({ owner: item.owner, repo: item.repo, number: item.number, read: true });
+    }
   }
   async hideIssueDetail() {
     await this.setState({ selected: undefined });
+  }
+  toggleFavorite(e, item) {
+    this.props.updateIssue({ owner: item.owner, repo: item.repo, number: item.number, favorite: !item.favorite });
   }
   render() {
     return (<React.Fragment>

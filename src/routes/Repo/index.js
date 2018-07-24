@@ -7,7 +7,7 @@ import PageHeader from 'ant-design-pro/lib/PageHeader';
 // import { MarkdownPreview } from 'react-marked-markdown';
 // import Ellipsis from 'ant-design-pro/lib/Ellipsis';
 // import Loading from '../Loading';
-import Issue from '../Issue';
+// import Issue from '../Issue';
 
 import styles from './index.module.less';
 
@@ -40,41 +40,18 @@ class Repo extends React.PureComponent {
     return opened && item && opened.owner === item.owner && opened.repo === item.repo && opened.number === item.number;
   }
   render() {
-    const { issues } = this.props;
-    // if (!issues) {
-    //   return <Loading />;
-    // }
     return (
-      <React.Fragment>
-        <PageHeader
-          title="所有"
-          action={<Button type="primary">刷新</Button>}
-          breadcrumbList={[{ title: null }]}
-        />
-        <div className={styles.container}>
-          <Card bordered={false}>
-            <List
-              size="large"
-              // itemLayout="vertical"
-              // rowKey="id"
-              loading={undefined === issues}
-              className={styles.list}
-              dataSource={issues}
-              renderItem={item => <Issue issue={item} opened={this.isOpened(item)} toggle={this.toggle} toggleFavorite={this.toggleFavorite} />}
-            />
-          </Card>
-        </div>
-      </React.Fragment>
+      <h1 style={{ textAlign: 'center', marginTop: '2em' }}>暂不支持，敬请期待...</h1>
     );
   }
 }
 
 Repo.propTypes = {
   issues: PropTypes.array,
-  dispatch: PropTypes.func,
+  // dispatch: PropTypes.func,
 };
 
 export default connect(state => ({
-  // repos: state.app.repos,
-  issues: state.repo.issues,
+  repos: state.app.repos,
+  // issues: state.repo.issues,
 }))(Repo);

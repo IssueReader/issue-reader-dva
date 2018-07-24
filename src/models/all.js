@@ -71,6 +71,16 @@ export default {
       newList[index] = { ...newList[index], ...payload };
       yield put({ type: 'save', payload: { list: newList } });
     },
+    *updateIssue({ payload }, { put, call, select }) {  // eslint-disable-line
+      yield call(localForageService.updateIssue, payload);
+      const { list } = yield select(state => state.all);
+      const index = list.findIndex(it => it.owner === payload.owner && it.repo === payload.repo && it.number === payload.number);
+      if (-1 !== index) {
+        const issues = [...list];
+        issues[index] = { ...issues[index], ...payload };
+        yield put({ type: 'save', payload: { list: issues } });
+      }
+    },
   },
 
   reducers: {

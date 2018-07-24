@@ -132,5 +132,13 @@ export default {
   },
   async getIssueInfo(data) {
     return github.getIssueInfo(data);
-  }
+  },
+  async updateIssue(info) {
+    const issues = await getItem('issues');
+    const index = issues.findIndex(it => it.owner === info.owner && it.repo === info.repo && it.number === info.number);
+    if (-1 !== index) {
+      issues[index] = { ...issues[index], ...info };
+      await setItem('issues', issues);
+    }
+  },
 };

@@ -15,6 +15,7 @@ class All extends React.PureComponent {
 
     this.onRefresh = this.onRefresh.bind(this);
     this.onPageChange = this.onPageChange.bind(this);
+    this.updateIssue = this.updateIssue.bind(this);
   }
   onRefresh() {
     this.props.dispatch(routerRedux.push({
@@ -29,6 +30,9 @@ class All extends React.PureComponent {
       search: queryString.stringify({ ...parsed, page: (1 === page ? undefined : page) }),
     }));
   }
+  updateIssue(info) {
+    this.props.dispatch({ type: 'all/updateIssue', payload: info });
+  }
   render() {
     return (
       <React.Fragment>
@@ -39,7 +43,7 @@ class All extends React.PureComponent {
         />
         <PageBody>
           <Card bordered={false}>
-            <Issues list={this.props.list} loading={this.props.loading} />
+            <Issues list={this.props.list} loading={this.props.loading} updateIssue={this.updateIssue} />
             <Pagination
               className={styles.pagination}
               current={this.props.page}
