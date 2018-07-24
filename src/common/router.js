@@ -20,7 +20,7 @@ const getRouterDate = () => {
     path: '/all',
     key: 'all',
     models: () => [
-      // import('../models/all'),
+      import('../models/all'),
     ],
     component: () => import('../routes/All'),
   }, {

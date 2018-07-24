@@ -110,10 +110,14 @@ export default {
     *updateDB({ payload }, { put, call, select }) {  // eslint-disable-line
       yield put({ type: 'save', payload: { percent: 0, status: 'active' } });
       yield call(localForageService.checkUser, payload);
-      const list = yield call(localForageService.getRepos, payload);
-      for (let i = 0, l = list.length; i < l; i += 1) {
-        yield call(localForageService.syncRepoInfo, list[i]);
-        yield put({ type: 'save', payload: { percent: Math.floor(i / l) } });
+      const utime = yield call(localForageService.getUpdateTime);
+      if (60 * 60 * 1000 < new Date().getTime() - utime) {
+        const list = yield call(localForageService.getRepos, payload);
+        for (let i = 0, l = list.length; i < l; i += 1) {
+          yield call(localForageService.syncRepoInfo, list[i]);
+          yield put({ type: 'save', payload: { percent: Math.floor(i / l) } });
+        }
+        yield call(localForageService.setUpdateTime);
       }
       const repos = yield call(localForageService.getRepos, payload);
       yield put({ type: 'save', payload: { percent: 100, status: 'success', repos } });

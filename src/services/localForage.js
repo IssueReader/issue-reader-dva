@@ -49,6 +49,7 @@ const updateIssueList = async (list) => {
     }
     return issue;
   });
+  issues.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
   await setItem('issues', issues);
 };
 
@@ -64,6 +65,23 @@ export default {
       return true;
     } catch (errMsg) {
       return false;
+    }
+  },
+  async getUpdateTime() {
+    try {
+      const utime = await localForage.getItem('utime');
+      return utime;
+    } catch (errMsg) {
+      return 0;
+    }
+  },
+  async setUpdateTime() {
+    try {
+      const utime = new Date().getTime();
+      await localForage.setItem('utime', utime);
+      return utime;
+    } catch (errMsg) {
+      return 0;
     }
   },
   async getRepos() {
@@ -83,12 +101,10 @@ export default {
     return repoInfo;
   },
   async addRepo({ owner, repo }) {
-    debugger;
     const info = await github.getRepoInfo({ owner, repo });
     if (info.errMsg) {
       return info;
     }
-    debugger;
     const { list, ...repoInfo } = info.data;
     await updateRepoInfo(repoInfo);
     await updateIssueList(list);
@@ -108,4 +124,13 @@ export default {
     }
     return { owner, repo };
   },
+  async getIssues(start = 0, limit = 100) {
+    const issues = await getItem('issues');
+    const total = issues.length;
+    const list = issues.slice(start, Math.min(start + limit, total));
+    return { data: { list, total, start } };
+  },
+  async getIssueInfo(data) {
+    return github.getIssueInfo(data);
+  }
 };

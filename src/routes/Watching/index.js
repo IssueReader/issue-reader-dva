@@ -18,7 +18,6 @@ class Watching extends React.PureComponent {
     this.unsubscribe = this.unsubscribe.bind(this);
   }
   async subscribe(e, record) {
-    debugger;
     if (record.loading) {
       return;
     }

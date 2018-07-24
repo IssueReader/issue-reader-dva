@@ -15,13 +15,17 @@ export default {
   async getRepoInfo({ owner, repo }) {
     const info = await graphql.query(gql`query {
       repository(owner: "${owner}", name: "${repo}") {
-        issues(first : 100, states:OPEN){
+        issues(last : 100, states:OPEN, orderBy:{field:CREATED_AT, direction:DESC}){
           totalCount
           edges{
             node{
               title
               number
               createdAt
+              updatedAt
+              author{
+                login
+              }
             }
           }
         }
@@ -39,8 +43,8 @@ export default {
       owner,
       repo,
       totalCount: info.data.repository.issues.totalCount,
-      list: info.data.repository.issues.edges.map((it) => {
-        return { owner, repo, ...it.node };
+      list: info.data.repository.issues.edges.filter(it => it.node.author.login === owner).map((it) => {
+        return { owner, repo, ...it.node, user: info.data.user };
       }),
       user: info.data.user,
     };
@@ -90,6 +94,25 @@ export default {
           watchCount: it.node.watchers.totalCount,
         };
       }),
+    };
+    return { data };
+  },
+  async getIssueInfo({ owner, repo, number }) {
+    const info = await graphql.query(gql`query {
+      repository(owner: "${owner}", name: "${repo}") {
+        issue(number:${number}){
+          body
+        }
+      }
+    }`);
+    if (info.errMsg) {
+      return info;
+    }
+    const data = {
+      owner,
+      repo,
+      number,
+      body: info.data.repository.issue.body,
     };
     return { data };
   },
