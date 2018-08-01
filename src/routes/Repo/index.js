@@ -2,14 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
 // import moment from 'moment';
-import { Button, Card, List } from 'antd';
-import PageHeader from 'ant-design-pro/lib/PageHeader';
+// import { Button, Card, List } from 'antd';
+// import PageHeader from 'ant-design-pro/lib/PageHeader';
 // import { MarkdownPreview } from 'react-marked-markdown';
 // import Ellipsis from 'ant-design-pro/lib/Ellipsis';
 // import Loading from '../Loading';
 // import Issue from '../Issue';
 
-import styles from './index.module.less';
+// import styles from './index.module.less';
 
 
 class Repo extends React.PureComponent {
