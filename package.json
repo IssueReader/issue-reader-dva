@@ -2,7 +2,7 @@
   "name": "issue-reader-dva",
   "version": "1.1.0",
   "private": true,
-  "homepage": "https://IssueReader.github.io/issue-reader-dva/",
+  "homepage": "https://issuereader.github.io/issue-reader-dva/",
   "dependencies": {
     "ant-design-pro": "^2.0.0-beta.2",
     "antd": "^3.7.0",
