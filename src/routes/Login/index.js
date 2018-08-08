@@ -12,7 +12,7 @@ import { Card, Button } from 'antd';
 import styles from './index.module.less';
 
 const jump2authorize = () => {
-  window.location.replace('https://github.com/login/oauth/authorize?client_id=e3fcd5f1d9cfd0d5aaaa&redirect_uri=http%3A%2F%2Flocalhost%3A8081&scope=repo&state=github');
+  window.location.replace('https://github.com/login/oauth/authorize?client_id=e3fcd5f1d9cfd0d5aaaa&redirect_uri=https%3A%2F%2Fissuereader.github.io%2F&scope=repo&state=github');
 };
 
 class Login extends React.PureComponent {
