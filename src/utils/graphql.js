@@ -7,7 +7,7 @@ const query = async (schema) => {
     return { errMsg: { message: 'get graphql client failed!' } };
   }
   try {
-    const resp = await client.query({ query: schema });
+    const resp = await client.query({ query: schema, errorPolicy: 'ignore' });
     return { data: resp.data };
   } catch (errMsg) {
     return { errMsg };

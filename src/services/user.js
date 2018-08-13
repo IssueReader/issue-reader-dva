@@ -11,7 +11,7 @@ import github from '../utils/github';
 
 export default {
   async getAccessTokenByCode(data) {
-    return request('http://localhost:3000/login', {
+    return request('https://issuereaderapi.leanapp.cn/login', {
       method: 'POST',
       body: JSON.stringify(data),
     });

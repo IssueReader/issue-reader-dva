@@ -1,4 +1,5 @@
 import ApolloClient from 'apollo-boost';
+
 import accessToken from './accessToken';
 
 
@@ -14,6 +15,10 @@ const getApolloClient = async () => {
       Accept: 'application/json',
       Authorization: `${token.token_type} ${token.access_token}`,
     },
+    // onError: ({ graphQLErrors, response }) => {
+    //   debugger;
+    //   return response;
+    // }
   });
 };
 

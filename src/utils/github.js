@@ -1,6 +1,21 @@
 import gql from 'graphql-tag';
 import graphql from './graphql';
 
+const parseUserInfo = (info, owner) => {
+  const userInfo = { avatarUrl: '', bio: '', name: owner };
+  if (!info || !info.data) {
+    return userInfo;
+  }
+  if (info.data.user) {
+    return info.data.user;
+  } else if (info.data.organization) {
+    info.data.organization.bio = '';
+    return info.data.organization;
+  } else {
+    return userInfo;
+  }
+};
+
 export default {
   getUserInfo() {
     return graphql.query(gql`query {
@@ -36,17 +51,20 @@ export default {
         name
       }
     }`);
+    // debugger;
     if (info.errMsg) {
       return info;
     }
+    const user = parseUserInfo(info, owner);
+    // debugger;
     const data = {
       owner,
       repo,
       totalCount: info.data.repository.issues.totalCount,
-      list: info.data.repository.issues.edges.filter(it => it.node.author.login === owner).map((it) => {
-        return { owner, repo, ...it.node, user: info.data.user };
+      list: info.data.repository.issues.edges.filter(it => it.node.author && it.node.author.login === owner).map((it) => {
+        return { owner, repo, ...it.node, user };
       }),
-      user: info.data.user,
+      user,
     };
     return { data };
   },

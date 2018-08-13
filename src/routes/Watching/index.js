@@ -27,8 +27,8 @@ class Watching extends React.PureComponent {
     if (record.loading) {
       return;
     }
-    const result = await this.props.dispatch({ type: 'app/unsubscribe', payload: { owner: record.owner, repo: record.name } });
-    this.update(record, { loading: false, watch: !result });
+    await this.props.dispatch({ type: 'watching/unsubscribe', payload: { owner: record.owner, repo: record.repo } });
+    // this.update(record, { loading: false, watch: !result });
   }
   render() {
     // const columns = this.getColumns();
