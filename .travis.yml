@@ -22,4 +22,4 @@ script:
 
 # after_success:
   # - yarn coveralls
-  - yarn deploy
+  # - yarn deploy
