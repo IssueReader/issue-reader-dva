@@ -4,7 +4,7 @@ import moment from 'moment';
 import { List, Avatar, Icon } from 'antd';
 import IssueDetail from './IssueDetail';
 
-import styles from './Issue.less';
+import styles from './Issue.module.less';
 
 
 const jump = (e, issue) => {

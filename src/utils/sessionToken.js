@@ -1,14 +1,20 @@
-import storage from './storage';
-
+// import storage from './storage';
+import localForage from 'localforage';
+const sessionTokenKey = 'sessionToken';
 
 export default {
-  get() {
-    return storage.get('sessionToken');
+  async get() {
+    try {
+      const token = await localForage.getItem(sessionTokenKey);
+      return token;
+    } catch (errMsg) {
+      return null;
+    }
   },
   set(sessionToken) {
-    return storage.set('sessionToken', sessionToken);
+    return localForage.setItem(sessionTokenKey, sessionToken);
   },
   remove() {
-    return storage.remove('sessionToken');
+    return localForage.removeItem(sessionTokenKey);
   },
 };

@@ -23,9 +23,10 @@ function checkStatus(response) {
   throw error;
 }
 
-function getHeaders() {
+function getHeaders(defaults) {
   const headers = {
     'Content-Type': 'application/json',
+    ...defaults,
   };
   const token = sessionToken.get();
   if (token) {
@@ -43,7 +44,7 @@ function getHeaders() {
  * @return {object}           An object containing either "data" or "err"
  */
 export default function request(url, opts) {
-  const headers = getHeaders();
+  const headers = getHeaders(opts.headers);
   const options = Object.assign({}, {
     method: 'GET',
     mode: 'cors',

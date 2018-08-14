@@ -1,0 +1,26 @@
+@import "../../../themes/index.less";
+
+.modal{
+  top: 0;
+  margin: 0 0 0 auto;
+  padding-bottom: 55px;
+  height: 100%;
+  :global(.ant-modal-content) {
+    height: 100%;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+  :global(.ant-modal-title) a{
+    color: @heading-color;
+  }
+  :global(.ant-modal-body){
+    background-color: @component-background;
+    height: 100%;
+    border-bottom-left-radius: @border-radius-base;
+    overflow-y: auto;
+    position: relative;
+    img{
+      max-width: 100%;
+    }
+  }
+}

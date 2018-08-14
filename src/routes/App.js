@@ -12,7 +12,7 @@ import Favorites from './Favorites';
 import Profile from './Profile';
 import Watching from './Watching';
 import Search from './Search';
-import styles from './App.less';
+import styles from './App.module.less';
 
 
 const { Header, Content, Sider } = Layout;

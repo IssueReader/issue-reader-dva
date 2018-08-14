@@ -5,7 +5,7 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 ![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)
 
-> https://issuereader.leanapp.cn
+> https://issuereader.github.io/
 
 Github Issue Blog Reader, Based On [dva](https://github.com/dvajs/dva).
 
@@ -45,7 +45,7 @@ yarn start
 
 ### Built With
 
-* [roadhog](https://github.com/sorrycc/roadhog) : Cli tool for creating react apps, configurable version of create-react-app.
+* [create-react-app](https://github.com/facebook/create-react-app) : Create React apps with no build configuration.
 
 * [dva](https://github.com/dvajs/dva) : React and redux based, lightweight and elm-style framework. (Inspired by elm and choo)
 
@@ -54,6 +54,11 @@ yarn start
 * [ant design pro](https://github.com/ant-design/ant-design-pro) : An out-of-box UI solution for enterprise applications http://pro.ant.design/
 
 * [Github OAuth App](https://developer.github.com/apps/building-oauth-apps/) : OAuth Apps use GitHub as an identity provider.
+
+* [Github GraphQL API v4](https://developer.github.com/v4/) : The GitHub GraphQL API v4 represents an architectural and conceptual shift from the GitHub REST API v3. You will likely encounter some new terminology in the GraphQL API v4 reference docs.
+
+* [localForage](https://github.com/localForage/localForage) : Offline storage, improved. Wraps IndexedDB, WebSQL, or localStorage using a simple but powerful API.
+
 
 <!-- ### Prerequisites
 
