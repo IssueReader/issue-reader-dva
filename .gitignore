@@ -17,10 +17,7 @@
 .env.production.local
 
 npm-debug.log*
-<<<<<<< HEAD
 *.log
 *.local
-=======
 yarn-debug.log*
 yarn-error.log*
->>>>>>> next
