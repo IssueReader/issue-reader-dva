@@ -1,0 +1,120 @@
+@import "../themes/index.less";
+@header-height: 50px;
+@logo-size: 40px;
+.layout {
+  width: 100%;
+  height: 100%;
+  min-width: @screen-lg-min;
+}
+
+.header {
+  position: fixed;
+  z-index: @zindex-affix;
+  padding-left: @padding-sm;
+  padding-right: @padding-sm;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  color: @heading-color-dark;
+  height: @header-height;
+  line-height: @header-height;
+  box-shadow: @shadow-1-down; // background: @heading-color;
+}
+
+.logo {
+  // margin-right: @padding-sm;
+  img {
+    width: @logo-size;
+    height: @logo-size;
+    display: block;
+  }
+}
+
+.navBar {
+  flex: 1;
+  .ellipsis;
+  height: 100%; // padding-left: @padding-md;
+  // padding-right: @padding-md;
+  a {
+    display: inline-block;
+    line-height: @header-height;
+    padding-left: @padding-md;
+    padding-right: @padding-md;
+    color: @text-color-secondary-dark;
+  }
+  a:hover {
+    color: @heading-color-dark;
+  }
+}
+
+.navExtra {
+  height: 100%;
+}
+
+.navItem {
+  display: inline-block;
+  height: 100%;
+  padding-left: @padding-md;
+  padding-right: @padding-md;
+  cursor: pointer;
+  color: @text-color-dark;
+  input {
+    color: @heading-color-dark;
+  }
+}
+
+.navItem:hover {
+  color: @heading-color-dark;
+}
+
+.activedNavItem {
+  .navItem;
+  background: @primary-color;
+  color: @heading-color-dark;
+}
+
+.username {
+  max-width: 8em;
+  display: inline-block;
+}
+
+.content {
+  padding-top: @header-height;
+}
+
+.sider {
+  position: fixed;
+  z-index: @zindex-affix;
+  overflow: auto;
+  height: 100%;
+  left: 0;
+  background: @component-background;
+  -ms-overflow-style: none;
+  box-shadow: @shadow-1-right;
+  // :global(.ant-menu) {
+  //   height: 100%;
+  // }
+}
+
+.sider::-webkit-scrollbar {
+  display: none;
+}
+
+.siderRight {
+  margin-left: 240px;
+}
+
+.placehoder{
+  height: 100px;
+}
+
+// .subMenu {
+//   max-height: 50%;
+//   overflow-x: hidden;
+//   overflow-y: auto;
+//   -ms-overflow-style: none;
+// }
+
+// .subMenu::-webkit-scrollbar {
+//   display: none;
+// }
