@@ -9,6 +9,9 @@
 # production
 # /build
 
+# editor
+/.vscode
+
 # misc
 .DS_Store
 .env.local
@@ -17,10 +20,7 @@
 .env.production.local
 
 npm-debug.log*
-<<<<<<< HEAD
 *.log
 *.local
-=======
 yarn-debug.log*
 yarn-error.log*
->>>>>>> next

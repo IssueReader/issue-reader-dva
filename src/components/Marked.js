@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import marked, { Renderer } from 'marked';
 import highlightjs from 'highlight.js';
-import 'highlight.js/styles/monokai.css';
+import 'github-markdown-css/github-markdown.css';
+import 'highlight.js/styles/github.css';
 
 const renderer = new Renderer();
 renderer.code = (code, language) => {
@@ -21,7 +22,9 @@ marked.setOptions({ renderer });
 class Marked extends React.PureComponent {
   render() {
     // eslint-disable-next-line
-    return <div dangerouslySetInnerHTML={{ __html: marked(this.props.context) }} />;
+    return <div className="markdown-body">
+      <div dangerouslySetInnerHTML={{ __html: marked(this.props.context) }} />
+    </div>;
   }
 }
 
