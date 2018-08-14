@@ -26,7 +26,9 @@ const getRouterDate = () => {
   }, {
     path: '/favorites',
     key: 'favorites',
-    models: () => [],
+    models: () => [
+      import('../models/favorites'),
+    ],
     component: () => import('../routes/Favorites'),
   }, {
     path: '/discovery',

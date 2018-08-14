@@ -141,4 +141,11 @@ export default {
       await setItem('issues', issues);
     }
   },
+  async getFavoriteIssues(start = 0, limit = 100) {
+    const issues = await getItem('issues');
+    const favoriteIssues = issues.filter(it => it && it.favorite);
+    const total = favoriteIssues.length;
+    const list = favoriteIssues.slice(start, Math.min(start + limit, total));
+    return { data: { list, total, start } };
+  },
 };

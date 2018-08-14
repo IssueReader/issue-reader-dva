@@ -4745,6 +4745,10 @@ gh-pages@^1.2.0:
     graceful-fs "4.1.11"
     rimraf "^2.6.2"
 
+github-markdown-css@^2.10.0:
+  version "2.10.0"
+  resolved "http://registry.npm.taobao.org/github-markdown-css/download/github-markdown-css-2.10.0.tgz#0612fed22816b33b282f37ef8def7a4ecabfe993"
+
 gl-matrix@~2.3.2:
   version "2.3.2"
   resolved "http://registry.npm.taobao.org/gl-matrix/download/gl-matrix-2.3.2.tgz#aac808c74af7d5db05fe04cb60ca1a0fcb174d74"
