@@ -24,7 +24,7 @@
   },
   "scripts": {
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
+    "deploy": "gh-pages -d build -b master -r https://github.com/IssueReader/IssueReader.github.io.git",
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
     "lint": "eslint --ext .js src test",

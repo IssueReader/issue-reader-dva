@@ -42,7 +42,15 @@ const SiderMenu = ({
       </Menu>
     );
   } else if (!pathname.match(/^\/search(\/.*)?/)) {
-    const selectedKeys = pathname.match(/^\/repos\/.*/) ? ['repos', pathname] : [pathname];
+    const selectedKeys = [];
+    if (pathname.match(/^\/repos\/.*/)) {
+      selectedKeys.push('/repos', pathname);
+    } else if (pathname.match(/^\/discovery\/.*/)) {
+      selectedKeys.push('/discovery');
+    } else {
+      selectedKeys.push(pathname);
+    }
+    // const selectedKeys = pathname.match(/^\/repos\/.*/) ? ['repos', pathname] : [pathname];
     return (
       <Menu
         defaultSelectedKeys={['/all']}
