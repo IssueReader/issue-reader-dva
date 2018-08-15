@@ -56,12 +56,15 @@ export default {
       return info;
     }
     const user = parseUserInfo(info, owner);
+    const issues = info && info.data && info.data.repository && info.data.repository.issues;
+    const totalCount = (issues && issues.totalCount) || 0;
+    const edges = (issues && issues.edges) || [];
     // debugger;
     const data = {
       owner,
       repo,
-      totalCount: info.data.repository.issues.totalCount,
-      list: info.data.repository.issues.edges.filter(it => it.node.author && it.node.author.login === owner).map((it) => {
+      totalCount: totalCount,
+      list: edges.filter(it => it.node.author && it.node.author.login === owner).map((it) => {
         return { owner, repo, ...it.node, user };
       }),
       user,
