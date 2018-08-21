@@ -130,6 +130,17 @@ export default {
     const list = issues.slice(start, Math.min(start + limit, total));
     return { data: { list, total, start } };
   },
+  async getRepoInfo({ owner, repo }) {
+    // const [repos, issues] =  await Promise.all(getItem('repos'), getItem('issues'));
+    const repos = await getItem('repos');
+    const respInfo = repos.find(it => owner === it.owner && repo === it.repo);
+    if (!respInfo) {
+      return { errMsg: { response: { status: '404', message: 'resp not found' } } };
+    }
+    const issues = await getItem('issues');
+    const list = issues.filter(it => owner === it.owner && repo === it.repo);
+    return { data: { ...respInfo, list } };
+  },
   async getIssueInfo(data) {
     return github.getIssueInfo(data);
   },

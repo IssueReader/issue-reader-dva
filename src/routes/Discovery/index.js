@@ -14,7 +14,7 @@ class Discovery extends React.PureComponent {
       return;
     }
     const match = value.match(/^https:\/\/github\.com\/([^/]+)\/([^/]+)$/);
-    if (!match && 3 !== match.length) {
+    if (!match || 3 !== match.length) {
       notification.error({ message: '仓库地址不合法，请检查' });
       return;
     }
