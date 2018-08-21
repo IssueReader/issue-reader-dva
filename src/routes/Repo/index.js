@@ -104,7 +104,9 @@ class Repo extends React.PureComponent {
       <React.Fragment>
         <PageHeader
           logo={user && <img alt="" src={user.avatarUrl} />}
-          title={`${this.props.match.params.owner}/${this.props.match.params.repo}`}
+          title={<a href={`https://github.com/${this.props.match.params.owner}/${this.props.match.params.repo}`} target="_blank">
+            {this.props.match.params.owner}/{this.props.match.params.repo}
+          </a>}
           content={user && <div>
             <div>{user.name}</div>
             <div>{user.bio}</div>

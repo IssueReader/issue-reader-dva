@@ -146,11 +146,11 @@ class BasicLayout extends React.PureComponent {
                 }}
               />
             </div> */}
-            <div className={styles.navItem}>
+            {/* <div className={styles.navItem}>
               <Icon type="check-square-o" />
               <span>&nbsp;Mark All as Read</span>
-            </div>
-            <div className={styles.navItem}>
+            </div> */}
+            <div className={styles.navItem} onClick={() => this.props.dispatch(routerRedux.push('/discovery'))}>
               <Icon type="plus" />
               <span>&nbsp;添加</span>
             </div>
