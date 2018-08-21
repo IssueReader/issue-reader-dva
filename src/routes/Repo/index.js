@@ -30,6 +30,7 @@ class Repo extends React.PureComponent {
     };
     this.onRefresh = this.onRefresh.bind(this);
     this.updateIssue = this.updateIssue.bind(this);
+    this.unsubscribe = this.unsubscribe.bind(this);
   }
   componentDidMount() {
     this.onRefresh();

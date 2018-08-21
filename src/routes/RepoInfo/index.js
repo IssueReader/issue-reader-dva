@@ -18,6 +18,7 @@ class RepoInfo extends React.PureComponent {
       user: undefined,
       // total: undefined,
     };
+    this.onRefresh = this.onRefresh.bind(this);
     this.subscribe = this.subscribe.bind(this);
     this.unsubscribe = this.unsubscribe.bind(this);
   }
@@ -39,7 +40,6 @@ class RepoInfo extends React.PureComponent {
     if (true !== this.state.loading) {
       return;
     }
-    debugger;
     this.setState({ loading: false, list: data && data.list, user: data && data.user });
   }
   updateIssue(info) {
