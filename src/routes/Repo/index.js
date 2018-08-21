@@ -1,6 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
+import { routerRedux } from 'dva/router';
+import { Button, Card } from 'antd';
+import PageHeader from 'ant-design-pro/lib/PageHeader';
+import PageBody from '../../components/PageBody';
+import Issues from '../../components/Issues';
+import localForageService from '../../services/localForage';
+
+
 // import moment from 'moment';
 // import { Button, Card, List } from 'antd';
 // import PageHeader from 'ant-design-pro/lib/PageHeader';
@@ -9,39 +17,110 @@ import { connect } from 'dva';
 // import Loading from '../Loading';
 // import Issue from '../Issue';
 
-// import styles from './index.module.less';
+import styles from './index.module.less';
 
 
 class Repo extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      opened: undefined,
+      loading: false,
+      user: undefined,
+      list: undefined,
     };
-    this.toggle = this.toggle.bind(this);
-    this.toggleFavorite = this.toggleFavorite.bind(this);
-    this.isOpened = this.isOpened.bind(this);
+    this.onRefresh = this.onRefresh.bind(this);
+    this.updateIssue = this.updateIssue.bind(this);
   }
-  toggle(item) {
-    if (this.isOpened(item)) {
-      this.setState({ opened: undefined });
-    } else {
-      if (!item.read) {
-        this.props.dispatch({ type: 'issues/markAsRead', payload: item });
-      }
-      this.setState({ opened: { ...item } });
+  componentDidMount() {
+    this.onRefresh();
+  }
+  componentWillUnmount() {
+    this.setState({ loading: false });
+  }
+  async onRefresh() {
+    if (this.state.loading) {
+      return;
+    }
+    this.setState({ loading: true, user: undefined, list: undefined });
+    const { data } = await localForageService.getRepoInfo({
+      owner: this.props.match.params.owner,
+      repo: this.props.match.params.repo,
+    });
+    if (!this.state.loading) {
+      return;
+    }
+    this.setState({ loading: false, list: data && data.list, user: data && data.user });
+    // this.setState({ loading: false });
+    // if (data) {
+    //   const { list, ...info } = data;
+    //   this.setState({ info, list });
+    // } else {
+    //   this.setState({ info: null, list: null });
+    // }
+  }
+  async updateIssue(info) {
+    // debugger;
+    // this.props.dispatch({ type: 'all/updateIssue', payload: info });
+    await localForageService.updateIssue(info);
+    const list = this.state.list;
+    const index = list.findIndex(it => it.owner === info.owner && it.repo === info.repo && it.number === info.number);
+    if (-1 !== index) {
+      const issues = [...list];
+      issues[index] = { ...issues[index], ...info };
+      this.setState({ list: issues });
     }
   }
-  toggleFavorite(item) {
-    this.props.dispatch({ type: 'issues/toggleFavorite', payload: item });
+  async unsubscribe() {
+    if (this.state.loading) {
+      return;
+    }
+    this.setState({ loading: true });
+    await this.props.dispatch({
+      type: 'app/unsubscribe',
+      payload: {
+        owner: this.props.match.params.owner,
+        repo: this.props.match.params.repo,
+      },
+    });
+    if (true !== this.state.loading) {
+      return;
+    }
+    this.setState({ loading: false });
+    this.props.dispatch(routerRedux.push({ pathname: '/all' }));
   }
-  isOpened(item) {
-    const { opened } = this.state;
-    return opened && item && opened.owner === item.owner && opened.repo === item.repo && opened.number === item.number;
-  }
+  // isSubscribed() {
+  //   if (!this.props.repos) {
+  //     return false;
+  //   }
+  //   const params = this.props.match.params;
+  //   const index = this.props.repos.findIndex(it => it.owner === params.owner && it.repo === params.repo);
+  //   return (-1 !== index);
+  // }
   render() {
+    const { user, list } = this.state;
+    // const subscribed = this.isSubscribed();
     return (
-      <h1 style={{ textAlign: 'center', marginTop: '2em' }}>暂不支持，敬请期待...</h1>
+      <React.Fragment>
+        <PageHeader
+          logo={user && <img alt="" src={user.avatarUrl} />}
+          title={`${this.props.match.params.owner}/${this.props.match.params.repo}`}
+          content={user && <div>
+            <div>{user.name}</div>
+            <div>{user.bio}</div>
+          </div>}
+          action={<div className={styles.title}>
+            {/* {(!subscribed) && <Button disabled={this.state.loading} type="primary" onClick={this.subscribe}>订阅</Button>} */}
+            <Button disabled={this.state.loading} type="danger" onClick={this.unsubscribe}>退订</Button>
+            <Button disabled={this.state.loading} onClick={this.onRefresh}>刷新</Button>
+          </div>}
+          breadcrumbList={[{ title: null }]}
+        />
+        <PageBody>
+          <Card bordered={false}>
+            <Issues list={list} loading={this.state.loading} updateIssue={this.updateIssue} />
+          </Card>
+        </PageBody>
+      </React.Fragment>
     );
   }
 }

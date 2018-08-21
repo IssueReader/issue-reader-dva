@@ -39,6 +39,7 @@ class RepoInfo extends React.PureComponent {
     if (true !== this.state.loading) {
       return;
     }
+    debugger;
     this.setState({ loading: false, list: data && data.list, user: data && data.user });
   }
   updateIssue(info) {
@@ -88,21 +89,27 @@ class RepoInfo extends React.PureComponent {
     return (-1 !== index);
   }
   render() {
+    const { user, list } = this.state;
     const subscribed = this.isSubscribed();
     return (
       <React.Fragment>
         <PageHeader
-          title={<div className={styles.title}>
+          logo={user && <img alt="" src={user.avatarUrl} />}
+          title={`${this.props.match.params.owner}/${this.props.match.params.repo}`}
+          content={user && <div>
+            <div>{user.name}</div>
+            <div>{user.bio}</div>
+          </div>}
+          action={<div className={styles.title}>
             {(!subscribed) && <Button disabled={this.state.loading} type="primary" onClick={this.subscribe}>订阅</Button>}
             {subscribed && <Button disabled={this.state.loading} type="danger" onClick={this.unsubscribe}>退订</Button>}
             <Button disabled={this.state.loading} onClick={this.onRefresh}>刷新</Button>
           </div>}
-          // action={<Button type="primary" onClick={this.onRefresh}>刷新</Button>}
           breadcrumbList={[{ title: null }]}
         />
         <PageBody>
           <Card bordered={false}>
-            <Issues list={this.state.list} loading={this.state.loading} updateIssue={this.updateIssue} />
+            <Issues list={list} loading={this.state.loading} updateIssue={this.updateIssue} />
             {/* <Pagination
               className={styles.pagination}
               current={this.props.page}
