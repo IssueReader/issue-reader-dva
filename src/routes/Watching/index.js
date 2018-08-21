@@ -13,9 +13,12 @@ class Watching extends React.PureComponent {
     // this.state = {
     //   list: undefined,
     // };
-    // this.load = this.load.bind(this);
+    this.load = this.load.bind(this);
     this.subscribe = this.subscribe.bind(this);
     this.unsubscribe = this.unsubscribe.bind(this);
+  }
+  load() {
+    this.props.dispatch({ type: 'watching/load' });
   }
   async subscribe(e, record) {
     if (record.loading) {
@@ -36,7 +39,7 @@ class Watching extends React.PureComponent {
       <React.Fragment>
         <PageHeader
           title="我的 Github 关注列表"
-          action={<Button type="primary" onClick={this.load}>刷新</Button>}
+          action={<Button type="primary" onClick={this.load} disabled={this.props.loading}>刷新</Button>}
           breadcrumbList={[{ title: null }]}
         />
         <div className={styles.container}>
