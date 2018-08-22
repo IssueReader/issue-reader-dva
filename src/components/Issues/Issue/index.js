@@ -26,7 +26,7 @@ class Issue extends React.PureComponent {
       return;
     }
     this.setState({ loading: false, detail: data || null });
-    if (data && !this.props.info.read) {
+    if (this.props.updateIssue && data && !this.props.info.read) {
       this.props.updateIssue(this.props.info, { read: true });
     }
   }
@@ -39,6 +39,29 @@ class Issue extends React.PureComponent {
     }
     this.setState({ visible: false });
     this.props.onCancle();
+  }
+  renderFavorite() {
+    if (!this.props.updateIssue) {
+      return null;
+    }
+    const onClick = () => this.updateIssue(this.props.info, { favorite: !this.props.info.favorite });
+    const data = this.props.info.favorite ? { text: '收藏', icon: 'heart-o' } : { text: '取消收藏', icon: 'heart' };
+    return (<React.Fragment>
+      <Divider type="vertical" />
+      <span onClick={onClick}>
+        <Icon type={data.icon} />
+        <span className={styles.favoriteText}>&nbsp;&nbsp;{data.text}</span>
+      </span>
+    </React.Fragment>);
+  }
+  renderKeepUnread() {
+    if (!this.props.updateIssue) {
+      return null;
+    }
+    return (<React.Fragment>
+      <Divider type="vertical" />
+      <span className={styles.keepUnread} onClick={() => this.props.updateIssue(this.props.info, { read: false })}>保持未读</span>
+    </React.Fragment>);
   }
   render() {
     const { info } = this.props;
@@ -63,17 +86,8 @@ class Issue extends React.PureComponent {
           <span className={styles.userName}>&nbsp;&nbsp;{info.user.name}</span>
           <Divider type="vertical" />
           {moment(info.createdAt).format('YYYY年M月D日')}
-          <Divider type="vertical" />
-          {(!info.favorite) && <span onClick={() => this.props.updateIssue(this.props.info, { favorite: true })}>
-            <Icon type="heart-o" />
-            <span className={styles.favoriteText}>&nbsp;&nbsp;收藏</span>
-          </span>}
-          {info.favorite && <span onClick={() => this.props.updateIssue(this.props.info, { favorite: false })}>
-            <Icon type="heart" />
-            <span className={styles.favoriteText}>&nbsp;&nbsp;取消收藏</span>
-          </span>}
-          <Divider type="vertical" />
-          <span className={styles.keepUnread} onClick={() => this.props.updateIssue(this.props.info, { read: false })}>保持未读</span>
+          {this.renderFavorite()}
+          {this.renderKeepUnread()}
         </div>
         {undefined === this.state.detail && <Loading />}
         {null === this.state.detail && <Alert
