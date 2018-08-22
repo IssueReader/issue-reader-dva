@@ -111,16 +111,7 @@ class RepoInfo extends React.PureComponent {
         />
         <PageBody>
           <Card bordered={false}>
-            <Issues list={list} loading={this.state.loading} updateIssue={this.updateIssue} />
-            {/* <Pagination
-              className={styles.pagination}
-              current={this.props.page}
-              showQuickJumper
-              pageSize={this.props.pageSize}
-              total={this.props.total}
-              showTotal={t => `共 ${t} 项`}
-              onChange={this.onPageChange}
-            /> */}
+            <Issues list={list} loading={this.state.loading} />
           </Card>
         </PageBody>
       </React.Fragment>

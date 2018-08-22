@@ -4,7 +4,7 @@ import dynamic from 'dva/dynamic';
 import { LocaleProvider } from 'antd';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
 import Loading from './components/Loading';
-import Uploading from './routes/Uploading';
+import Updating from './routes/Updating';
 import Login from './routes/Login';
 import BasicLayout from './layouts/BasicLayout';
 
@@ -18,7 +18,7 @@ function RouterConfig({ history, app }) {
     <LocaleProvider locale={zhCN}>
       <Router history={history}>
         <Switch>
-          <Route path="/" exact component={Uploading} />
+          <Route path="/" exact component={Updating} />
           <Route path="/login" exact component={Login} />
           <Route path="(.*)" render={props => <BasicLayout {...props} app={app} />} />
         </Switch>
