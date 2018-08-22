@@ -115,7 +115,7 @@ export default {
         const list = yield call(localForageService.getRepos, payload);
         for (let i = 0, l = list.length; i < l; i += 1) {
           yield call(localForageService.syncRepoInfo, list[i]);
-          yield put({ type: 'save', payload: { percent: Math.floor(i / l) } });
+          yield put({ type: 'save', payload: { percent: Math.floor((i * 100) / l) } });
         }
         yield call(localForageService.setUpdateTime);
       }
