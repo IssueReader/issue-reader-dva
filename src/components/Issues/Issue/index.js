@@ -44,8 +44,8 @@ class Issue extends React.PureComponent {
     if (!this.props.updateIssue) {
       return null;
     }
-    const onClick = () => this.updateIssue(this.props.info, { favorite: !this.props.info.favorite });
-    const data = this.props.info.favorite ? { text: '收藏', icon: 'heart-o' } : { text: '取消收藏', icon: 'heart' };
+    const onClick = () => this.props.updateIssue(this.props.info, { favorite: !this.props.info.favorite });
+    const data = this.props.info.favorite ? { text: '取消收藏', icon: 'heart' } : { text: '收藏', icon: 'heart-o' };
     return (<React.Fragment>
       <Divider type="vertical" />
       <span onClick={onClick}>

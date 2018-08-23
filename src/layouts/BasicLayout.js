@@ -87,14 +87,6 @@ const SiderMenu = ({
   }
 };
 
-// const getDefaultLink = (repos) => {
-//   if (!repos || 0 === repos.length) {
-//     return '/user/watching';
-//   } else {
-//     return `/repos/${repos[0].owner}/${repos[0].repo}`;
-//   }
-// };
-
 
 class BasicLayout extends React.PureComponent {
   // constructor(props) {
@@ -131,7 +123,10 @@ class BasicLayout extends React.PureComponent {
             <img alt="IssueReader" src="/logo128x128.png" />
           </a>
           <div className={styles.navBar}>
-            <Link to="/all">Github Issue Blog Reader</Link>
+            <Link to="/all">
+              <Icon type="home" />
+              &nbsp;&nbsp;首页
+            </Link>
           </div>
           <div className={styles.navExtra}>
             {/* <div className={styles.navItem}>

@@ -27,14 +27,16 @@
     width: @logo-size;
     height: @logo-size;
     display: block;
+    border-radius: @border-radius-base;
   }
 }
 
 .navBar {
   flex: 1;
   .ellipsis;
-  height: 100%; // padding-left: @padding-md;
-  // padding-right: @padding-md;
+  height: 100%;
+  padding-left: @padding-lg;
+  padding-right: @padding-lg;
   a {
     display: inline-block;
     line-height: @header-height;
@@ -44,6 +46,9 @@
   }
   a:hover {
     color: @heading-color-dark;
+  }
+  a:focus {
+    text-decoration: none;
   }
 }
 

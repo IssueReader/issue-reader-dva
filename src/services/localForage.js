@@ -34,7 +34,7 @@ const updateRepoInfo = async (repoInfo) => {
   if (-1 === index) {
     repos.push(repoInfo);
   } else {
-    repos[index] = repoInfo;
+    repos[index] = { ...repos[index], ...repoInfo };
   }
   await setItem('repos', repos);
 };
@@ -118,11 +118,15 @@ export default {
       await setItem('repos', repos);
     }
     const issues = await getItem('issues');
-    const list = issues.filter(it => (it.owner !== owner || it.repo !== repo));
+    const list = issues.filter(it => (it.owner !== owner || it.repo !== repo || !it.favorite));
     if (list.length < issues.length) {
       await setItem('issues', list);
     }
     return { owner, repo };
+  },
+  async updateRepo(repoInfo) {
+    await updateRepoInfo(repoInfo);
+    return repoInfo;
   },
   async getIssues(start = 0, limit = 100) {
     const issues = await getItem('issues');
