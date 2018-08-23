@@ -27,7 +27,7 @@ export default {
       }
     }`);
   },
-  async getRepoInfo({ owner, repo }) {
+  async getRepoInfo({ owner, repo, team = false, filterAuthor = true }) {
     const info = await graphql.query(gql`query {
       repository(owner: "${owner}", name: "${repo}") {
         issues(last : 100, states:OPEN, orderBy:{field:CREATED_AT, direction:DESC}){
@@ -51,7 +51,6 @@ export default {
         name
       }
     }`);
-    // debugger;
     if (info.errMsg) {
       return info;
     }
@@ -64,7 +63,7 @@ export default {
       owner,
       repo,
       totalCount: totalCount,
-      list: edges.filter(it => it.node.author && it.node.author.login === owner).map((it) => {
+      list: edges.filter(it => true === team || false === filterAuthor || (it.node.author && it.node.author.login === owner)).map((it) => {
         return { owner, repo, ...it.node, user };
       }),
       user,
