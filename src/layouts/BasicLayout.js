@@ -149,6 +149,10 @@ class BasicLayout extends React.PureComponent {
               <Icon type="plus" />
               <span>&nbsp;添加</span>
             </div>
+            <a className={styles.navItem} href="https://github.com/IssueReader/issue-reader-dva" target="_blank" rel="noopener noreferrer">
+              <Icon type="github" />
+              <span>&nbsp;Star</span>
+            </a>
             <Dropdown
               overlay={
                 <Menu onClick={this.onUserMenuClick}>
