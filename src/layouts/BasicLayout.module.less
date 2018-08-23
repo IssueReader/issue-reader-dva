@@ -90,8 +90,7 @@
   left: 0;
   background: @component-background;
   -ms-overflow-style: none;
-  box-shadow: @shadow-1-right;
-  // :global(.ant-menu) {
+  box-shadow: @shadow-1-right; // :global(.ant-menu) {
   //   height: 100%;
   // }
 }
@@ -104,17 +103,17 @@
   margin-left: 240px;
 }
 
-.placehoder{
+.placehoder {
   height: 100px;
 }
 
-// .subMenu {
-//   max-height: 50%;
-//   overflow-x: hidden;
-//   overflow-y: auto;
-//   -ms-overflow-style: none;
-// }
+.subMenu :global(.ant-menu-sub) {
+  max-height: 500px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -ms-overflow-style: none;
+}
 
-// .subMenu::-webkit-scrollbar {
-//   display: none;
-// }
+.subMenu :global(.ant-menu-sub)::-webkit-scrollbar {
+  display: none;
+}

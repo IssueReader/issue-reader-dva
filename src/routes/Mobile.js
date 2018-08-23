@@ -5,7 +5,7 @@ import Exception from 'ant-design-pro/lib/Exception';
 
 
 const Mobile = () => {
-  return <Exception type="500" title={<React.Fragment />} desc="抱歉，请使用 PC 访问" actions={[]} />;
+  return <Exception type="500" title="" desc="暂不支持，请使用电脑访问" actions={[]} />;
 };
 
 // function mapStateToProps(state) {
