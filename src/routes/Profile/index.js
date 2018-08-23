@@ -16,6 +16,9 @@ class Profile extends React.PureComponent {
       loading: false,
     };
   }
+  componentWillUnmount() {
+    this.setState({ selected: undefined, loading: false });
+  }
   showModal(item) {
     if (this.state.selected || this.state.loading) {
       return;
@@ -41,6 +44,9 @@ class Profile extends React.PureComponent {
     });
     this.props.dispatch({ type: 'app/updateRepos' });
     await localForageService.syncRepoInfo(this.state.selected);
+    if (!this.state.loading) {
+      return;
+    }
     notification.success({ message: '保存成功', description: '' });
     this.setState({ selected: undefined, loading: false });
   }
