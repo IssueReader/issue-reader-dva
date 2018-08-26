@@ -24,6 +24,8 @@ yarn start
 * [ ] 订阅博客自动 star 仓库
 * [ ] 文章点赞并同步到 issue
 * [ ] 文章评论显示
+* [ ] 单元测试
+* [ ] E2E 测试
 
 
 ## Developing

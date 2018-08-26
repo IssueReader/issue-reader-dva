@@ -119,7 +119,7 @@ class BasicLayout extends React.PureComponent {
     return (
       <Layout className={styles.layout}>
         <Header className={styles.header}>
-          <a className={styles.logo} href="https://github.com/IssueReader">
+          <a className={styles.logo} href="https://github.com/IssueReader/IssueReader.github.io" target="_blank" rel="noopener noreferrer">
             <img alt="IssueReader" src="/logo128x128.png" />
           </a>
           <div className={styles.navBar}>
@@ -149,9 +149,9 @@ class BasicLayout extends React.PureComponent {
               <Icon type="plus" />
               <span>&nbsp;添加</span>
             </div>
-            <a className={styles.navItem} href="https://github.com/IssueReader/issue-reader-dva" target="_blank" rel="noopener noreferrer">
+            <a className={styles.navItem} href="https://github.com/IssueReader/IssueReader.github.io" target="_blank" rel="noopener noreferrer">
               <Icon type="github" />
-              <span>&nbsp;Star</span>
+              <span>&nbsp;Star on Github</span>
             </a>
             <Dropdown
               overlay={
