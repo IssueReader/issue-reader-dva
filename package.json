@@ -1,6 +1,6 @@
 {
   "name": "issue-reader-dva",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Github Issue 博客阅读工具",
   "keywords": [
     "dva",
