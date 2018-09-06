@@ -1,5 +1,8 @@
+const paths = require('react-scripts/config/paths');
 const rewireLess = require('react-app-rewire-less-modules');
 const { injectBabelPlugin } = require('react-app-rewired');
+
+paths.servedPath = './';
 
 module.exports = {
   webpack: (config, env) => {
@@ -17,6 +20,6 @@ module.exports = {
     return (proxy, allowedHost) => {
       const config = configFunction(proxy, allowedHost);
       return config;
-    }
+    };
   },
 };
