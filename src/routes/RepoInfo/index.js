@@ -86,7 +86,7 @@ class RepoInfo extends React.PureComponent {
     }
     const params = this.props.match.params;
     const index = this.props.repos.findIndex(it => it.owner === params.owner && it.repo === params.repo);
-    return (-1 !== index);
+    return -1 !== index;
   }
   render() {
     const { user, list } = this.state;
@@ -95,18 +95,40 @@ class RepoInfo extends React.PureComponent {
       <React.Fragment>
         <PageHeader
           logo={user && <img alt="" src={user.avatarUrl} />}
-          title={<a href={`https://github.com/${this.props.match.params.owner}/${this.props.match.params.repo}`} target="_blank">
-            {this.props.match.params.owner}/{this.props.match.params.repo}
-          </a>}
-          content={user && <div>
-            <div>{user.name}</div>
-            <div>{user.bio}</div>
-          </div>}
-          action={<div className={styles.title}>
-            {(!subscribed) && <Button disabled={this.state.loading} type="primary" onClick={this.subscribe}>订阅</Button>}
-            {subscribed && <Button disabled={this.state.loading} type="danger" onClick={this.unsubscribe}>退订</Button>}
-            <Button disabled={this.state.loading} onClick={this.onRefresh}>刷新</Button>
-          </div>}
+          title={
+            <a
+              href={`https://github.com/${this.props.match.params.owner}/${this.props.match.params.repo}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {this.props.match.params.owner}/{this.props.match.params.repo}
+            </a>
+          }
+          content={
+            user && (
+              <div>
+                <div>{user.name}</div>
+                <div>{user.bio}</div>
+              </div>
+            )
+          }
+          action={
+            <div className={styles.title}>
+              {!subscribed && (
+                <Button disabled={this.state.loading} type="primary" onClick={this.subscribe}>
+                  订阅
+                </Button>
+              )}
+              {subscribed && (
+                <Button disabled={this.state.loading} type="danger" onClick={this.unsubscribe}>
+                  退订
+                </Button>
+              )}
+              <Button disabled={this.state.loading} onClick={this.onRefresh}>
+                刷新
+              </Button>
+            </div>
+          }
           breadcrumbList={[{ title: null }]}
         />
         <PageBody>

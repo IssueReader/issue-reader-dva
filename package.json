@@ -17,8 +17,8 @@
   ],
   "bugs": "https://github.com/IssueReader/issue-reader-dva/issues",
   "dependencies": {
-    "ant-design-pro": "^2.0.0-beta.2",
-    "antd": "^3.7.0",
+    "ant-design-pro": "^2.0.0",
+    "antd": "^3.10.0",
     "apollo-boost": "^0.1.10",
     "dva": "^2.3.1",
     "dva-loading": "^2.0.3",
@@ -31,7 +31,7 @@
     "moment": "^2.22.2",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
-    "react-scripts": "2.0.0-next.3e165448",
+    "react-scripts": "^2.0.4",
     "redux-logger": "^3.0.6",
     "ua-device": "^0.1.10"
   },
