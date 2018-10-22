@@ -37,7 +37,7 @@
   },
   "scripts": {
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d ./build -b gh-pages -r https://github.com/IssueReader/issue-reader-dva.git",
+    "deploy": "gh-pages -d build -r https://github.com/IssueReader/issue-reader-dva.git",
     "release": "gh-pages -d build -b master -r https://github.com/IssueReader/IssueReader.github.io.git",
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
@@ -45,6 +45,16 @@
     "test": "react-app-rewired test --env=jsdom",
     "publish": "lerna publish --skip-npm",
     "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "babel-plugin-import": "^1.8.0",
+    "eslint-config-alloy": "^1.4.2",
+    "gh-pages": "^2.0.1",
+    "lerna": "^3.2.1",
+    "react-app-rewire-less": "^2.1.2",
+    "react-app-rewire-less-modules": "^1.3.0",
+    "react-app-rewired": "^2.0.0",
+    "webpack-bundle-analyzer": "^3.0.2"
   },
   "browserslist": {
     "development": [
@@ -57,15 +67,5 @@
       "not op_mini all",
       "ie 11"
     ]
-  },
-  "devDependencies": {
-    "babel-plugin-import": "^1.8.0",
-    "eslint-config-alloy": "^1.4.2",
-    "gh-pages": "^1.2.0",
-    "lerna": "^3.2.1",
-    "react-app-rewire-less": "^2.1.2",
-    "react-app-rewire-less-modules": "^1.3.0",
-    "react-app-rewired": "^2.0.0",
-    "webpack-bundle-analyzer": "^3.0.2"
   }
 }
