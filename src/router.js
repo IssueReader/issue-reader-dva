@@ -9,7 +9,6 @@ import Login from './routes/Login';
 import Mobile from './routes/Mobile';
 import BasicLayout from './layouts/BasicLayout';
 
-
 dynamic.setDefaultLoadingComponent(() => {
   return <Loading />;
 });

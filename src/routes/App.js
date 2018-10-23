@@ -14,22 +14,12 @@ import Watching from './Watching';
 import Search from './Search';
 import styles from './App.module.less';
 
-
 const { Header, Content, Sider } = Layout;
-const SiderMenu = ({
-  pathname,
-  repos,
-  onClick,
-}) => {
+const SiderMenu = ({ pathname, repos, onClick }) => {
   if (pathname.match(/^\/user\/.*/)) {
     const selectedKeys = [pathname];
     return (
-      <Menu
-        defaultSelectedKeys={['/user/profile']}
-        selectedKeys={selectedKeys}
-        mode="inline"
-        onClick={onClick}
-      >
+      <Menu defaultSelectedKeys={['/user/profile']} selectedKeys={selectedKeys} mode="inline" onClick={onClick}>
         <Menu.Item key="/user/profile">
           <Icon type="user" />
           <span>&nbsp;个人中心</span>
@@ -52,8 +42,20 @@ const SiderMenu = ({
       >
         <Menu.Item key="/all">所有</Menu.Item>
         <Menu.SubMenu key="/repos" title="我的订阅" className={styles.subMenu}>
-          {repos && repos.map(it => it && <Menu.Item key={`/repos/${it.owner}/${it.repo}`}>{it.owner}/{it.repo}</Menu.Item>)}
-          {(!repos || 0 === repos.length) && <Menu.Item key="no-data" disabled>没有订阅</Menu.Item>}
+          {repos &&
+            repos.map(
+              it =>
+                it && (
+                  <Menu.Item key={`/repos/${it.owner}/${it.repo}`}>
+                    {it.owner}/{it.repo}
+                  </Menu.Item>
+                ),
+            )}
+          {(!repos || 0 === repos.length) && (
+            <Menu.Item key="no-data" disabled>
+              没有订阅
+            </Menu.Item>
+          )}
         </Menu.SubMenu>
         <Menu.Item key="/favorites">我的收藏</Menu.Item>
         <Menu.Item key="/discovery">发现</Menu.Item>
@@ -75,14 +77,13 @@ const SiderMenu = ({
   }
 };
 
-const getDefaultLink = (repos) => {
+const getDefaultLink = repos => {
   if (!repos || 0 === repos.length) {
     return '/user/watching';
   } else {
     return `/repos/${repos[0].owner}/${repos[0].repo}`;
   }
 };
-
 
 class App extends React.PureComponent {
   // constructor(props) {
@@ -96,18 +97,14 @@ class App extends React.PureComponent {
     } else {
       this.props.dispatch(routerRedux.push(key));
     }
-  }
+  };
 
   onSiderMenuClick = ({ key }) => {
     this.props.dispatch(routerRedux.push(key));
-  }
+  };
 
   render() {
-    const {
-      location,
-      userInfo,
-      repos,
-    } = this.props;
+    const { location, userInfo, repos } = this.props;
 
     const link = getDefaultLink(repos);
 
@@ -125,10 +122,10 @@ class App extends React.PureComponent {
               <HeaderSearch
                 placeholder="站内搜索"
                 dataSource={['搜索提示一', '搜索提示二', '搜索提示三']}
-                onSearch={(value) => {
+                onSearch={value => {
                   console.log('input', value); // eslint-disable-line
                 }}
-                onPressEnter={(value) => {
+                onPressEnter={value => {
                   console.log('enter', value); // eslint-disable-line
                 }}
               />
@@ -162,7 +159,10 @@ class App extends React.PureComponent {
             >
               <div className={styles.navItem}>
                 <Avatar size="small" src={userInfo.avatarUrl} />
-                <span className={styles.username}>&nbsp;{userInfo.name}</span>
+                <span className={styles.username}>
+                  &nbsp;
+                  {userInfo.name}
+                </span>
               </div>
             </Dropdown>
           </div>

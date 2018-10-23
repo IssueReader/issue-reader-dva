@@ -8,8 +8,7 @@ import userService from '../services/user';
 import authService from '../services/auth';
 import localForageService from '../services/localForage';
 
-
-const replaceState = (searchObj) => {
+const replaceState = searchObj => {
   const search = queryString.stringify(searchObj);
   const newSearch = search ? `?${search}` : '';
   const href = window.location.href.replace(/^([^?#]+)(\?[^#]+)(#.*)?/, `$1${newSearch}$3`);
@@ -17,7 +16,6 @@ const replaceState = (searchObj) => {
 };
 
 export default {
-
   namespace: 'app',
 
   state: {
@@ -47,10 +45,12 @@ export default {
       }
       const from = 'mobile' === payload.pathname ? '/all' : payload.pathname;
       const search = queryString.stringify(Object.assign({ from }, queryString.parse(payload.search)));
-      yield put(routerRedux.replace({
-        pathname: '/',
-        search: `?${search}`,
-      }));
+      yield put(
+        routerRedux.replace({
+          pathname: '/',
+          search: `?${search}`,
+        }),
+      );
     },
     *loading({ payload }, { put }) {
       // debugger;  // eslint-disable-line

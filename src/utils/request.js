@@ -1,13 +1,12 @@
 import fetch from 'dva/fetch';
 import sessionToken from './sessionToken';
 
-
 function parseText(response) {
   return response.text();
 }
 
 function parseJSON(text) {
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     const res = '' === text ? {} : JSON.parse(text);
     resolve(res);
   });
@@ -45,11 +44,15 @@ function getHeaders(defaults) {
  */
 export default function request(url, opts) {
   const headers = getHeaders(opts.headers);
-  const options = Object.assign({}, {
-    method: 'GET',
-    mode: 'cors',
-    headers,
-  }, opts);
+  const options = Object.assign(
+    {},
+    {
+      method: 'GET',
+      mode: 'cors',
+      headers,
+    },
+    opts,
+  );
 
   return fetch(url, options)
     .then(checkStatus)

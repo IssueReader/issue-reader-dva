@@ -18,17 +18,21 @@ class Favorites extends React.PureComponent {
     this.updateIssue = this.updateIssue.bind(this);
   }
   onRefresh() {
-    this.props.dispatch(routerRedux.push({
-      pathname: this.props.location.pathname,
-      search: this.props.location.search,
-    }));
+    this.props.dispatch(
+      routerRedux.push({
+        pathname: this.props.location.pathname,
+        search: this.props.location.search,
+      }),
+    );
   }
   onPageChange(page) {
     const parsed = queryString.parse(this.props.location.search);
-    this.props.dispatch(routerRedux.push({
-      pathname: this.props.location.pathname,
-      search: queryString.stringify({ ...parsed, page: (1 === page ? undefined : page) }),
-    }));
+    this.props.dispatch(
+      routerRedux.push({
+        pathname: this.props.location.pathname,
+        search: queryString.stringify({ ...parsed, page: 1 === page ? undefined : page }),
+      }),
+    );
   }
   updateIssue(info) {
     this.props.dispatch({ type: 'favorites/updateIssue', payload: info });
@@ -38,7 +42,11 @@ class Favorites extends React.PureComponent {
       <React.Fragment>
         <PageHeader
           title="我的收藏"
-          action={<Button type="primary" onClick={this.onRefresh}>刷新</Button>}
+          action={
+            <Button type="primary" onClick={this.onRefresh}>
+              刷新
+            </Button>
+          }
           breadcrumbList={[{ title: null }]}
         />
         <PageBody>

@@ -5,9 +5,7 @@
 
 import userServices from '../services/user';
 
-
 export default {
-
   namespace: 'watching',
 
   state: {
@@ -38,8 +36,8 @@ export default {
         return yield put({ type: 'save', payload: { list: null } });
       }
       const { repos } = yield select(state => state.app);
-      const list = data.list.map((it) => {
-        const index = repos.findIndex((item) => {
+      const list = data.list.map(it => {
+        const index = repos.findIndex(item => {
           return it.repo === item.repo && it.owner === item.owner;
         });
         return { ...it, watch: -1 !== index };
@@ -68,7 +66,7 @@ export default {
       if (!list) {
         return;
       }
-      const index = list.findIndex(it => (payload.owner === it.owner && payload.repo === it.repo));
+      const index = list.findIndex(it => payload.owner === it.owner && payload.repo === it.repo);
       if (-1 === index) {
         return;
       }
@@ -83,5 +81,4 @@ export default {
       return { ...state, ...action.payload };
     },
   },
-
 };

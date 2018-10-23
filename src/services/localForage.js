@@ -1,7 +1,6 @@
 import localForage from 'localforage';
 import github from '../utils/github';
 
-
 const clearDB = async () => {
   await localForage.setItem('repos', []);
   await localForage.setItem('issues', []);
@@ -21,14 +20,11 @@ const getItem = async (key, defaultValue = []) => {
 const setItem = async (key, value) => {
   try {
     await localForage.setItem(key, value);
-  } catch (errMsg) {
-
-  }
+  } catch (errMsg) {}
   return value;
 };
 
-
-const updateRepoInfo = async (repoInfo) => {
+const updateRepoInfo = async repoInfo => {
   const repos = await getItem('repos');
   const index = repos.findIndex(it => it.owner === repoInfo.owner && it.repo === repoInfo.repo);
   if (-1 === index) {
@@ -38,10 +34,12 @@ const updateRepoInfo = async (repoInfo) => {
   }
   await setItem('repos', repos);
 };
-const updateIssueList = async (list) => {
+const updateIssueList = async list => {
   const issues = await getItem('issues');
-  list.map((issue) => {
-    const index = issues.findIndex(it => it.owner === issue.owner && it.repo === issue.repo && it.number === issue.number);
+  list.map(issue => {
+    const index = issues.findIndex(
+      it => it.owner === issue.owner && it.repo === issue.repo && it.number === issue.number,
+    );
     if (-1 === index) {
       issues.push(issue);
     } else {
@@ -52,7 +50,6 @@ const updateIssueList = async (list) => {
   issues.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
   await setItem('issues', issues);
 };
-
 
 export default {
   async checkUser(userInfo) {
@@ -118,7 +115,7 @@ export default {
       await setItem('repos', repos);
     }
     const issues = await getItem('issues');
-    const list = issues.filter(it => (it.owner !== owner || it.repo !== repo || !it.favorite));
+    const list = issues.filter(it => it.owner !== owner || it.repo !== repo || !it.favorite);
     if (list.length < issues.length) {
       await setItem('issues', list);
     }

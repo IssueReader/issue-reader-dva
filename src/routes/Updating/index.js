@@ -4,15 +4,16 @@ import { connect } from 'dva';
 import { Progress } from 'antd';
 import styles from './index.module.less';
 
-
 const Updating = ({ percent }) => {
-  return (<div className={styles.flex}>
-    <div className={styles.loading}>
-      <div className={styles.text}>loading</div>
-      <div className={styles.percent}>{percent}%</div>
-      <Progress percent={percent} showInfo={false} strokeWidth={1} status="active" />
+  return (
+    <div className={styles.flex}>
+      <div className={styles.loading}>
+        <div className={styles.text}>loading</div>
+        <div className={styles.percent}>{percent}%</div>
+        <Progress percent={percent} showInfo={false} strokeWidth={1} status="active" />
+      </div>
     </div>
-  </div>);
+  );
 };
 
 Updating.propTypes = {

@@ -1,7 +1,6 @@
 import request from './request';
 // import { api } from './config';
 
-
 const api = 'https://issuereaderapi.leanapp.cn';
 // const api = 'http://localhost:3000';
 const generateUrl = (a, params) => {

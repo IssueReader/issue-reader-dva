@@ -6,9 +6,7 @@ import queryString from 'query-string';
 import localForageService from '../services/localForage';
 // import userServices from '../services/user';
 
-
 export default {
-
   namespace: 'all',
 
   state: {
@@ -39,7 +37,10 @@ export default {
       }
       yield put({ type: 'save', payload: { list: [], loading: true, page } });
       const { data } = yield call(localForageService.getIssues, (page - 1) * pageSize, pageSize);
-      yield put({ type: 'save', payload: { loading: false, list: (data && data.list) || null, total: data && data.total } });
+      yield put({
+        type: 'save',
+        payload: { loading: false, list: (data && data.list) || null, total: data && data.total },
+      });
     },
     // *getOwners({ payload }, { put, call }) {},
     *subscribe({ payload }, { put, call }) {
@@ -63,7 +64,7 @@ export default {
       if (!list) {
         return;
       }
-      const index = list.findIndex(it => (payload.owner === it.owner && payload.repo === it.repo));
+      const index = list.findIndex(it => payload.owner === it.owner && payload.repo === it.repo);
       if (-1 === index) {
         return;
       }
@@ -74,7 +75,9 @@ export default {
     *updateIssue({ payload }, { put, call, select }) {  // eslint-disable-line
       yield call(localForageService.updateIssue, payload);
       const { list } = yield select(state => state.all);
-      const index = list.findIndex(it => it.owner === payload.owner && it.repo === payload.repo && it.number === payload.number);
+      const index = list.findIndex(
+        it => it.owner === payload.owner && it.repo === payload.repo && it.number === payload.number,
+      );
       if (-1 !== index) {
         const issues = [...list];
         issues[index] = { ...issues[index], ...payload };
@@ -88,5 +91,4 @@ export default {
       return { ...state, ...action.payload };
     },
   },
-
 };

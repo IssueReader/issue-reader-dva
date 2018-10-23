@@ -18,38 +18,84 @@ class Discovery extends React.PureComponent {
       notification.error({ message: '仓库地址不合法，请检查' });
       return;
     }
-    this.props.dispatch(routerRedux.push({
-      pathname: `/discovery/${match[1]}/${match[2]}`,
-    }));
+    this.props.dispatch(
+      routerRedux.push({
+        pathname: `/discovery/${match[1]}/${match[2]}`,
+      }),
+    );
   }
   push({ owner, repo }) {
-    this.props.dispatch(routerRedux.push({
-      pathname: `/discovery/${owner}/${repo}`,
-    }));
+    this.props.dispatch(
+      routerRedux.push({
+        pathname: `/discovery/${owner}/${repo}`,
+      }),
+    );
   }
   render() {
     const list = [
-      { owner: 'lifesinger', repo: 'blog', name: 'lifesinger', avatarUrl: 'https://avatars2.githubusercontent.com/u/97227' },
+      {
+        owner: 'lifesinger',
+        repo: 'blog',
+        name: 'lifesinger',
+        avatarUrl: 'https://avatars2.githubusercontent.com/u/97227',
+      },
       { owner: 'xufei', repo: 'blog', name: 'xufei', avatarUrl: 'https://avatars2.githubusercontent.com/u/2725159' },
-      { owner: 'sorrycc', repo: 'blog', name: 'chencheng (云谦)', avatarUrl: 'https://avatars1.githubusercontent.com/u/35128' },
+      {
+        owner: 'sorrycc',
+        repo: 'blog',
+        name: 'chencheng (云谦)',
+        avatarUrl: 'https://avatars1.githubusercontent.com/u/35128',
+      },
       { owner: 'fouber', repo: 'blog', name: '张云龙', avatarUrl: 'https://avatars1.githubusercontent.com/u/536297' },
-      { owner: 'youngwind', repo: 'blog', name: '梁少峰', avatarUrl: 'https://avatars0.githubusercontent.com/u/8401872' },
-      { owner: 'mqyqingfeng', repo: 'Blog', name: '冴羽', avatarUrl: 'https://avatars1.githubusercontent.com/u/11458263' },
+      {
+        owner: 'youngwind',
+        repo: 'blog',
+        name: '梁少峰',
+        avatarUrl: 'https://avatars0.githubusercontent.com/u/8401872',
+      },
+      {
+        owner: 'mqyqingfeng',
+        repo: 'Blog',
+        name: '冴羽',
+        avatarUrl: 'https://avatars1.githubusercontent.com/u/11458263',
+      },
       { owner: 'dwqs', repo: 'blog', name: 'Pomy', avatarUrl: 'https://avatars3.githubusercontent.com/u/7871813' },
-      { owner: 'jawil', repo: 'blog', name: '微醺岁月', avatarUrl: 'https://avatars0.githubusercontent.com/u/16515708' },
-      { owner: 'camsong', repo: 'blog', name: 'Cam Song', avatarUrl: 'https://avatars1.githubusercontent.com/u/948896' },
+      {
+        owner: 'jawil',
+        repo: 'blog',
+        name: '微醺岁月',
+        avatarUrl: 'https://avatars0.githubusercontent.com/u/16515708',
+      },
+      {
+        owner: 'camsong',
+        repo: 'blog',
+        name: 'Cam Song',
+        avatarUrl: 'https://avatars1.githubusercontent.com/u/948896',
+      },
       { owner: 'wengjq', repo: 'Blog', name: 'wengjq', avatarUrl: 'https://avatars3.githubusercontent.com/u/17982300' },
-      { owner: 'Colafornia', repo: 'little-robot', name: 'Colafornia', avatarUrl: 'https://avatars3.githubusercontent.com/u/13252625' },
-      { owner: 'riskers', repo: 'blog', name: '一波不是一波', avatarUrl: 'https://avatars1.githubusercontent.com/u/5653652' },
+      {
+        owner: 'Colafornia',
+        repo: 'little-robot',
+        name: 'Colafornia',
+        avatarUrl: 'https://avatars3.githubusercontent.com/u/13252625',
+      },
+      {
+        owner: 'riskers',
+        repo: 'blog',
+        name: '一波不是一波',
+        avatarUrl: 'https://avatars1.githubusercontent.com/u/5653652',
+      },
     ];
     return (
       <React.Fragment>
         <PageHeader
-          title={<Input.Search
-            placeholder="输入想订阅的仓库地址，如 https://github.com/lifesinger/blog"
-            onSearch={value => this.onSearch(value)}
-            enterButton
-          />}
+          title={
+            <Input.Search
+              placeholder="输入想订阅的仓库地址，如 https://github.com/lifesinger/blog"
+              onSearch={value => this.onSearch(value)}
+              enterButton
+            />
+          }
           breadcrumbList={[{ title: null }]}
         />
         <PageBody>
@@ -63,7 +109,8 @@ class Discovery extends React.PureComponent {
               <List.Item>
                 <Card className={styles.pointer} title={`${it.owner}/${it.repo}`} onClick={() => this.push(it)}>
                   <Avatar size="small" shape="square" src={it.avatarUrl} />
-                  &nbsp;{it.name}
+                  &nbsp;
+                  {it.name}
                 </Card>
               </List.Item>
             )}

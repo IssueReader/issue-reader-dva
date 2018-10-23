@@ -8,7 +8,6 @@ import github from '../utils/github';
 //   return resource('/user/:type/:owner/:repo/issues/:number');
 // };
 
-
 export default {
   async getAccessTokenByCode(data) {
     return request('https://issuereaderapi.leanapp.cn/login', {

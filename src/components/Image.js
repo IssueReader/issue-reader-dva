@@ -30,9 +30,9 @@ class Image extends React.PureComponent {
     if (undefined === this.state.url) {
       return null;
     } else if (null === this.state.url) {
-      return (<React.Fragment>{this.props.alt}</React.Fragment>);
+      return <React.Fragment>{this.props.alt}</React.Fragment>;
     }
-    return (<img src={this.state.url} alt={this.props.alt} />);
+    return <img src={this.state.url} alt={this.props.alt} />;
   }
 }
 

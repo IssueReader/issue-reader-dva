@@ -1,10 +1,11 @@
 import request from '../utils/request';
 import github from '../utils/github';
 
-
 export default {
   async getIssues(repo) {
-    return request(repo.replace(/https:\/\/github.com\/(\w+)\/(\w+)(\/.*)?/, 'https://api.github.com/repos/$1/$2/issues'));
+    return request(
+      repo.replace(/https:\/\/github.com\/(\w+)\/(\w+)(\/.*)?/, 'https://api.github.com/repos/$1/$2/issues'),
+    );
     // return jwt.init({ login: login_v1 });
   },
   async getUserInfo(repo) {

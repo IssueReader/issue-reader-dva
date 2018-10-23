@@ -5,13 +5,13 @@ const separator = '--';
 const getRealPrefix = () => {
   return `${prefix}${separator}`;
 };
-const getRealKey = (key) => {
+const getRealKey = key => {
   return `${getRealPrefix()}${key}`;
 };
 
-const checkPrefix = (pre) => {
+const checkPrefix = pre => {
   const mat = pre.match(/^[\w]+$/);
-  return (null !== mat);
+  return null !== mat;
 };
 
 export default {

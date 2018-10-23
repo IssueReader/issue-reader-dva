@@ -18,14 +18,16 @@ const parseUserInfo = (info, owner) => {
 
 export default {
   getUserInfo() {
-    return graphql.query(gql`query {
-      viewer {
-        login
-        avatarUrl
-        name
-        bio
+    return graphql.query(gql`
+      query {
+        viewer {
+          login
+          avatarUrl
+          name
+          bio
+        }
       }
-    }`);
+    `);
   },
   async getRepoInfo({ owner, repo, team = false, filterAuthor = true }) {
     const info = await graphql.query(gql`query {
@@ -63,9 +65,11 @@ export default {
       owner,
       repo,
       totalCount: totalCount,
-      list: edges.filter(it => true === team || false === filterAuthor || (it.node.author && it.node.author.login === owner)).map((it) => {
-        return { owner, repo, ...it.node, user };
-      }),
+      list: edges
+        .filter(it => true === team || false === filterAuthor || (it.node.author && it.node.author.login === owner))
+        .map(it => {
+          return { owner, repo, ...it.node, user };
+        }),
       user,
     };
     return { data };
@@ -103,7 +107,7 @@ export default {
     const { totalCount, edges } = info.data.viewer.watching;
     const data = {
       totalCount,
-      list: edges.map((it) => {
+      list: edges.map(it => {
         return {
           cursor: it.cursor,
           owner: it.node.owner.login,

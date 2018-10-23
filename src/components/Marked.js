@@ -18,13 +18,14 @@ renderer.code = (code, language) => {
 // Set the renderer to marked.
 marked.setOptions({ renderer });
 
-
 class Marked extends React.PureComponent {
   render() {
     // eslint-disable-next-line
-    return <div className="markdown-body">
-      <div dangerouslySetInnerHTML={{ __html: marked(this.props.context) }} />
-    </div>;
+    return (
+      <div className="markdown-body">
+        <div dangerouslySetInnerHTML={{ __html: marked(this.props.context) }} />
+      </div>
+    );
   }
 }
 

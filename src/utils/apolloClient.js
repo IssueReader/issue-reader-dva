@@ -2,7 +2,6 @@ import ApolloClient from 'apollo-boost';
 
 import accessToken from './accessToken';
 
-
 const getApolloClient = async () => {
   const token = await accessToken.get();
   if (!token) {

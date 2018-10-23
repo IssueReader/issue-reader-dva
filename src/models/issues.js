@@ -5,9 +5,7 @@ import { notification } from 'antd';
 
 import userServices from '../services/user';
 
-
 export default {
-
   namespace: 'issues',
 
   state: {
@@ -56,7 +54,7 @@ export default {
       if (!issues) {
         return;
       }
-      const list = issues.map((it) => {
+      const list = issues.map(it => {
         if (payload.owner === it.owner && payload.repo === it.repo && payload.number === it.number) {
           return { ...it, favorite: payload.favorite, read: payload.read };
         }
@@ -71,5 +69,4 @@ export default {
       return { ...state, ...action.payload };
     },
   },
-
 };

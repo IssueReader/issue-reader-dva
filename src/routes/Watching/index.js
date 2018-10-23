@@ -6,7 +6,6 @@ import PageHeader from 'ant-design-pro/lib/PageHeader';
 // import userServices from '../../services/user';
 import styles from './index.module.less';
 
-
 class Watching extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -39,46 +38,63 @@ class Watching extends React.PureComponent {
       <React.Fragment>
         <PageHeader
           title="我的 Github 关注列表"
-          action={<Button type="primary" onClick={this.load} disabled={this.props.loading}>刷新</Button>}
+          action={
+            <Button type="primary" onClick={this.load} disabled={this.props.loading}>
+              刷新
+            </Button>
+          }
           breadcrumbList={[{ title: null }]}
         />
         <div className={styles.container}>
           <Card bordered={false}>
             <Table
-              columns={[{
-                title: '博主',
-                key: 'owner',
-                render: (text, record) => (
-                  <span>
-                    <Avatar src={record.avatarUrl} />
-                    &nbsp;&nbsp;{record.owner}
-                  </span>
-                ),
-              }, {
-                title: 'Github 仓库',
-                dataIndex: 'repo',
-                key: 'repo',
-              }, {
-                title: '文章数',
-                dataIndex: 'issueCount',
-                key: 'issueCount',
-              }, {
-                title: 'star 人数',
-                dataIndex: 'starCount',
-                key: 'starCount',
-              }, {
-                title: '订阅人数',
-                dataIndex: 'watchCount',
-                key: 'watchCount',
-              }, {
-                title: '操作',
-                key: 'action',
-                render: (text, record) => (
-                  record.watch ?
-                    <Button loading={record.loading} onClick={e => this.unsubscribe(e, record)}>退订</Button> :
-                    <Button type="primary" loading={record.loading} onClick={e => this.subscribe(e, record)}>订阅</Button>
-                ),
-              }]}
+              columns={[
+                {
+                  title: '博主',
+                  key: 'owner',
+                  render: (text, record) => (
+                    <span>
+                      <Avatar src={record.avatarUrl} />
+                      &nbsp;&nbsp;
+                      {record.owner}
+                    </span>
+                  ),
+                },
+                {
+                  title: 'Github 仓库',
+                  dataIndex: 'repo',
+                  key: 'repo',
+                },
+                {
+                  title: '文章数',
+                  dataIndex: 'issueCount',
+                  key: 'issueCount',
+                },
+                {
+                  title: 'star 人数',
+                  dataIndex: 'starCount',
+                  key: 'starCount',
+                },
+                {
+                  title: '订阅人数',
+                  dataIndex: 'watchCount',
+                  key: 'watchCount',
+                },
+                {
+                  title: '操作',
+                  key: 'action',
+                  render: (text, record) =>
+                    record.watch ? (
+                      <Button loading={record.loading} onClick={e => this.unsubscribe(e, record)}>
+                        退订
+                      </Button>
+                    ) : (
+                      <Button type="primary" loading={record.loading} onClick={e => this.subscribe(e, record)}>
+                        订阅
+                      </Button>
+                    ),
+                },
+              ]}
               dataSource={this.props.list}
               loading={this.props.loading}
               pagination={false}

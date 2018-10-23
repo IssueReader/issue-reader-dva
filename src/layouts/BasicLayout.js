@@ -15,22 +15,12 @@ import getAppRoutes from '../common/router';
 // import Search from './Search';
 import styles from './BasicLayout.module.less';
 
-
 const { Header, Content, Sider } = Layout;
-const SiderMenu = ({
-  pathname,
-  repos,
-  onClick,
-}) => {
+const SiderMenu = ({ pathname, repos, onClick }) => {
   if (pathname.match(/^\/user\/.*/)) {
     const selectedKeys = [pathname];
     return (
-      <Menu
-        defaultSelectedKeys={['/user/profile']}
-        selectedKeys={selectedKeys}
-        mode="inline"
-        onClick={onClick}
-      >
+      <Menu defaultSelectedKeys={['/user/profile']} selectedKeys={selectedKeys} mode="inline" onClick={onClick}>
         <Menu.Item key="/user/profile">
           <Icon type="user" />
           <span>&nbsp;个人中心</span>
@@ -61,11 +51,22 @@ const SiderMenu = ({
       >
         <Menu.Item key="/all">所有</Menu.Item>
         <Menu.SubMenu key="/repos" title="我的订阅" className={styles.subMenu}>
-          {repos && repos.map(it => it && <Menu.Item key={`/repos/${it.owner}/${it.repo}`}>
-            {it.user && <Avatar size="small" shape="square" src={it.user.avatarUrl} />}
-            &nbsp;{it.owner}/{it.repo}
-          </Menu.Item>)}
-          {(!repos || 0 === repos.length) && <Menu.Item key="no-data" disabled>没有订阅</Menu.Item>}
+          {repos &&
+            repos.map(
+              it =>
+                it && (
+                  <Menu.Item key={`/repos/${it.owner}/${it.repo}`}>
+                    {it.user && <Avatar size="small" shape="square" src={it.user.avatarUrl} />}
+                    &nbsp;
+                    {it.owner}/{it.repo}
+                  </Menu.Item>
+                ),
+            )}
+          {(!repos || 0 === repos.length) && (
+            <Menu.Item key="no-data" disabled>
+              没有订阅
+            </Menu.Item>
+          )}
         </Menu.SubMenu>
         <Menu.Item key="/favorites">我的收藏</Menu.Item>
         <Menu.Item key="/discovery">发现</Menu.Item>
@@ -87,7 +88,6 @@ const SiderMenu = ({
   }
 };
 
-
 class BasicLayout extends React.PureComponent {
   // constructor(props) {
   //   super(props);
@@ -100,26 +100,26 @@ class BasicLayout extends React.PureComponent {
     } else {
       this.props.dispatch(routerRedux.push(key));
     }
-  }
+  };
 
   onSiderMenuClick = ({ key }) => {
     this.props.dispatch(routerRedux.push(key));
-  }
+  };
 
   render() {
-    const {
-      app,
-      location,
-      userInfo,
-      repos,
-    } = this.props;
+    const { app, location, userInfo, repos } = this.props;
 
     // const link = getDefaultLink(repos);
 
     return (
       <Layout className={styles.layout}>
         <Header className={styles.header}>
-          <a className={styles.logo} href="https://github.com/IssueReader/IssueReader.github.io" target="_blank" rel="noopener noreferrer">
+          <a
+            className={styles.logo}
+            href="https://github.com/IssueReader/IssueReader.github.io"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <img alt="IssueReader" src="/logo128x128.png" />
           </a>
           <div className={styles.navBar}>
@@ -149,7 +149,12 @@ class BasicLayout extends React.PureComponent {
               <Icon type="plus" />
               <span>&nbsp;添加</span>
             </div>
-            <a className={styles.navItem} href="https://github.com/IssueReader/IssueReader.github.io" target="_blank" rel="noopener noreferrer">
+            <a
+              className={styles.navItem}
+              href="https://github.com/IssueReader/IssueReader.github.io"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <Icon type="github" />
               <span>&nbsp;Star on Github</span>
             </a>
@@ -174,7 +179,10 @@ class BasicLayout extends React.PureComponent {
             >
               <div className={styles.navItem}>
                 <Avatar size="small" src={userInfo.avatarUrl} />
-                <span className={styles.username}>&nbsp;{userInfo.name}</span>
+                <span className={styles.username}>
+                  &nbsp;
+                  {userInfo.name}
+                </span>
               </div>
             </Dropdown>
           </div>
