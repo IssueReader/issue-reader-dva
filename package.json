@@ -52,6 +52,7 @@
     "eslint-config-prettier": "^3.1.0",
     "eslint-plugin-prettier": "^3.0.0",
     "gh-pages": "^2.0.1",
+    "husky": "^1.1.2",
     "lerna": "^3.2.1",
     "prettier": "^1.14.3",
     "react-app-rewire-less": "^2.1.2",
@@ -70,5 +71,11 @@
       "not op_mini all",
       "ie 11"
     ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint",
+      "pre-push": "npm run lint"
+    }
   }
 }
