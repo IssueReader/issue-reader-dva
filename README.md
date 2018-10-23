@@ -1,66 +1,58 @@
-# Github 博客阅读工具
 
-## 访问地址
-### https://issuereader.github.io
+![issue-reader-dva](./images/logo128x128.png)
 
-### 托管地址
-https://github.com/IssueReader/IssueReader.github.io
+# issue-reader-dva
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
+![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)
 
-## 项目背景
+> https://issuereader.github.io/
 
-目前很多高质量的博客使用 Github 仓库的 issue 作为管理工具，对于作者而言减少很多运维的成本，对于读者来说，却没有比较好的阅读工具。一般的做法是通过 watch，但是 watch 的仓库很多时，和其他代码仓库的 issue 混杂一起，会收到很多冗余信息(例如，issue 新增评论，或者新人用户新建无意义的 issue)，还经常有一些没有经验的菜鸟跑到博主的仓库中乱开 issue 导致一些骂战。Github Issue Blog Reader 应运而生。
+Github Issue 博客阅读工具, Based On [dva](https://github.com/dvajs/dva).
 
+## Getting started
 
-## 主要功能介绍
+```
+git clone https://github.com/IssueReader/issue-reader-dva.git
+cd issue-reader-dva
+yarn install
+yarn start
+```
 
-主要功能如下：
-* 文章阅读：根据时间排序列出订阅的博客文章
-* 收藏：好文收藏，随时温习
-* 发现：搜索 Github 仓库进行订阅，同时提供了几个热门的博客推荐
+## TODO
 
-
-## 源码地址
-* https://github.com/IssueReader/issue-reader-dva
-
-
-## 技术栈
-
-### 客户端
-* 前端框架：react
-* 样式库：ant design
-* 数据路由管理框架：dva
-* 数据存储：localForage，本地化数据存储，保存用户订阅与阅读记录
-* 数据来源：通过 apollo-client 查询 GitHub API V4 (Graphql) 接口获取博客数据
-
-### 构建工具
-* create-react-app: 项目脚手架
-* react-app-rewired: 配置 create-react-app
-* gh-pages: 自动将代码仓库 build 的结果发布到 https://github.com/IssueReader/IssueReader.github.io 仓库中
-
-### 后端
-* leancloud: 通过 leancloud 上的 nodejs 服务获取 github accessToken，解决前端无法直接通过 code 获取 token 问题
+* [ ] 同步订阅配置与收藏到 gist
+* [ ] 订阅博客自动 star 仓库
+* [ ] 文章点赞并同步到 issue
+* [ ] 文章评论显示
+* [ ] 单元测试
+* [ ] E2E 测试
 
 
-## 功能截图
-1. 所有文章
+## Developing
 
-![](./images/1534256652151-dbe27c7f-8c84-4590-b230-ba260d05a748.png)
-(./images/1534256701448-6d0188c0-cc02-433b-ac5d-c766bb62be3c.png)
+### Built With
 
-3. 收藏/取消收藏文章
+* [create-react-app](https://github.com/facebook/create-react-app) : Create React apps with no build configuration.
 
-![](./images/1534256761957-7831d00d-18b6-4e95-91e3-0b8acbc33531.png)
+* [dva](https://github.com/dvajs/dva) : React and redux based, lightweight and elm-style framework. (Inspired by elm and choo)
 
-4. 输入仓库地址添加订阅
+* [ant design](https://github.com/ant-design/ant-design) : A UI Design Language http://ant.design
 
-![](./images/1534256821401-4cb32ce1-0fe1-4df0-9b41-dc70aba0831c.png)
+* [ant design pro](https://github.com/ant-design/ant-design-pro) : An out-of-box UI solution for enterprise applications http://pro.ant.design/
 
-![](./images/1534256859104-3b1ff5c2-e167-45d6-b3a5-8fbb72b3615d.png)
+* [Github OAuth App](https://developer.github.com/apps/building-oauth-apps/) : OAuth Apps use GitHub as an identity provider.
 
-5. Github 关注列表页面，快速订阅关注列表中的仓库
+* [Github GraphQL API v4](https://developer.github.com/v4/) : The GitHub GraphQL API v4 represents an architectural and conceptual shift from the GitHub REST API v3. You will likely encounter some new terminology in the GraphQL API v4 reference docs.
 
-![](./images/1534256520867-bffa28ef-7011-41b6-9777-f9dd0448cccf.png)
+* [localForage](https://github.com/localForage/localForage) : Offline storage, improved. Wraps IndexedDB, WebSQL, or localStorage using a simple but powerful API.
 
-6. 使用 GitHub 授权登录
 
-![](./images/1534256403181-2fe84168-7cba-43bb-a26f-d88275dda27c.png)
+## Contributing
+
+我们非常欢迎你的贡献，你可以通过以下方式和我们一起共建 😃：
+* 通过 Issue 报告 bug 或进行咨询。
+* 提交 Pull Request 。
+
+## Licensing
+
+issue-reader-dva is [MIT licensed](./LICENSE).
