@@ -1,6 +1,6 @@
 {
-    "name": "",
-    "short_name": "",
+    "name": "Issue Reader",
+    "short_name": "Github Issue Blog Reader",
     "icons": [
         {
             "src": "/android-chrome-96x96.png",
